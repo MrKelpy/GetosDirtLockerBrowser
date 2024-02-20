@@ -78,6 +78,8 @@
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="requests\DiscordInteractions.cs" />
+        <Compile Include="requests\DiscordUser.cs" />
+        <Compile Include="utils\FileUtilExtensions.cs" />
         <EmbeddedResource Include="gui\DirtLookupInterface.resx">
           <DependentUpon>DirtLookupInterface.cs</DependentUpon>
         </EmbeddedResource>
@@ -113,11 +115,19 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="Discord.Net" Version="3.13.1" />
       <PackageReference Include="LaminariaCore-Databases" Version="1.2.12" />
       <PackageReference Include="LaminariaCore-General" Version="1.1.1" />
       <PackageReference Include="LaminariaCore-Winforms" Version="1.0.1" />
+      <PackageReference Include="System.Text.Json" Version="8.0.2" />
     </ItemGroup>
     <ItemGroup>
+        <Content Include=".\assets\loader.gif" Visible="False">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include=".\assets\warning.png" Visible="False">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
       <Content Include="sql\dirtlocker.sql" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

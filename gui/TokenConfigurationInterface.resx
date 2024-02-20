@@ -121,18 +121,17 @@
     <value>17, 17</value>
   </metadata>
   <data name="label1.Text" xml:space="preserve">
-    <value>﻿• To get the token for your personal account:
-* The dirt addition interface will be unlocked upon the insertion of a valid token 
+    <value>﻿* The dirt addition interface will be unlocked upon the insertion of a valid token 
+• To get a token for the application to be used:
 
-1. Open Discord in your web browser and login 
-2. Open any server or direct message channel 
-3. Press Ctrl+Shift+I to show developer tools
-4. Navigate to the Network tab
-5. Press Ctrl+R to reload
-6. Switch between random channels to trigger network requests
-7. Search for a request that starts with messages
-8. Select the Headers tab on the right
-9. Scroll down to the Request Headers section
-10. Copy the value of the "authorization" header</value>
+1. Go to the Discord Developer Portal: https://discordapp.com/developers/applications/
+2. Click "New Application" if you don't have any bots created, otherwise click on your bot.
+3. Give your application a name.
+
+4. Go to the "Bot" tab on the left side of the screen.
+5. Click "Add Bot" and confirm the action.
+6. You will now see a "Token" section, click "Click to Reveal Token".
+
+7. Copy the revealed token and keep it secure.</value>
   </data>
 </root>

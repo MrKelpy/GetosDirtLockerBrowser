@@ -67,6 +67,7 @@ namespace GetosDirtLocker.gui
             // 
             // ToolStripTokenConfig
             // 
+            this.ToolStripTokenConfig.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.ToolStripTokenConfig.Name = "ToolStripTokenConfig";
             this.ToolStripTokenConfig.Size = new System.Drawing.Size(127, 20);
             this.ToolStripTokenConfig.Text = "Token Configuration";
@@ -90,6 +91,7 @@ namespace GetosDirtLocker.gui
             this.MaximumSize = new System.Drawing.Size(750, 450);
             this.MinimumSize = new System.Drawing.Size(750, 450);
             this.Name = "Mainframe";
+            this.Load += new System.EventHandler(this.Mainframe_Load);
             this.MenuBarPages.ResumeLayout(false);
             this.MenuBarPages.PerformLayout();
             this.ResumeLayout(false);

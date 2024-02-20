@@ -14,7 +14,7 @@ namespace GetosDirtLocker
         /// <summary>
         /// The file management system used to manage the files of the application.
         /// </summary>
-        public static FileManager FileManager { get; } = new FileManager();
+        public static FileManager FileManager { get; } = new (".GetosLocker", true);
         
         /// <summary>
         /// The main entry point for the application.

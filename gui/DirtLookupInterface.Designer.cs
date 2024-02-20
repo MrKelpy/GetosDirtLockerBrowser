@@ -32,35 +32,25 @@ namespace GetosDirtLocker.gui
         private void InitializeComponent()
         {
             this.Frame = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.TextBoxNotesLookup = new GetosDirtLocker.controls.BetterTextBox();
             this.TextBoxUserUUIDLookup = new GetosDirtLocker.controls.BetterTextBox();
             this.TextBoxIndexLookup = new GetosDirtLocker.controls.BetterTextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.mionjnl = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.Frame.SuspendLayout();
             this.SuspendLayout();
             // 
             // Frame
             // 
-            this.Frame.Controls.Add(this.panel1);
             this.Frame.Controls.Add(this.TextBoxNotesLookup);
             this.Frame.Controls.Add(this.TextBoxUserUUIDLookup);
             this.Frame.Controls.Add(this.TextBoxIndexLookup);
-            this.Frame.Controls.Add(this.label1);
+            this.Frame.Controls.Add(this.mionjnl);
             this.Frame.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Frame.Location = new System.Drawing.Point(0, 24);
             this.Frame.Name = "Frame";
             this.Frame.Size = new System.Drawing.Size(734, 387);
             this.Frame.TabIndex = 2;
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(11, 44);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(710, 331);
-            this.panel1.TabIndex = 11;
             // 
             // TextBoxNotesLookup
             // 
@@ -89,13 +79,13 @@ namespace GetosDirtLocker.gui
             this.TextBoxIndexLookup.Size = new System.Drawing.Size(231, 20);
             this.TextBoxIndexLookup.TabIndex = 5;
             // 
-            // label1
+            // mionjnl
             // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Location = new System.Drawing.Point(12, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(710, 1);
-            this.label1.TabIndex = 0;
+            this.mionjnl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mionjnl.Location = new System.Drawing.Point(12, 40);
+            this.mionjnl.Name = "mionjnl";
+            this.mionjnl.Size = new System.Drawing.Size(710, 1);
+            this.mionjnl.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -113,21 +103,18 @@ namespace GetosDirtLocker.gui
             this.Controls.Add(this.Frame);
             this.Controls.Add(this.menuStrip1);
             this.Name = "DirtLookupInterface";
-            this.Text = "DirtLookup";
             this.Frame.ResumeLayout(false);
             this.Frame.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
-        private System.Windows.Forms.Panel panel1;
-
         private GetosDirtLocker.controls.BetterTextBox TextBoxIndexLookup;
         private GetosDirtLocker.controls.BetterTextBox TextBoxNotesLookup;
 
         private System.Windows.Forms.Panel Frame;
         private GetosDirtLocker.controls.BetterTextBox TextBoxUserUUIDLookup;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label mionjnl;
         private System.Windows.Forms.MenuStrip menuStrip1;
 
         #endregion

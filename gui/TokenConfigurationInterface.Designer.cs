@@ -87,7 +87,6 @@ namespace GetosDirtLocker.gui
             this.Controls.Add(this.Frame);
             this.Controls.Add(this.menuStrip1);
             this.Name = "TokenConfigurationInterface";
-            this.Text = "TokenConfigurationInterface";
             this.Frame.ResumeLayout(false);
             this.Frame.PerformLayout();
             this.ResumeLayout(false);
@@ -96,7 +95,7 @@ namespace GetosDirtLocker.gui
 
         private System.Windows.Forms.Label label1;
 
-        private GetosDirtLocker.controls.BetterTextBox TextBoxToken;
+        public GetosDirtLocker.controls.BetterTextBox TextBoxToken;
 
         private System.Windows.Forms.Panel Frame;
 

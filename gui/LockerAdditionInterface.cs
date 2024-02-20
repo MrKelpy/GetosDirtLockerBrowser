@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace GetosDirtLocker.gui
@@ -20,17 +22,9 @@ namespace GetosDirtLocker.gui
         private LockerAdditionInterface()
         {
             InitializeComponent();
-            label1.Focus();
-        }
+            ljihgvfyc.Focus();
 
-        /// <summary>
-        /// Changes the state of all the controls in the form to the specified state.
-        /// </summary>
-        /// <param name="state">The state to update the controls to</param>
-        public void ChangeControlStates(bool state)
-        {
-            foreach (Control control in this.Frame.Controls.OfType<Control>())
-                control.Enabled = state;
+            PictureLoading.SizeMode = PictureBoxSizeMode.Zoom;
         }
 
         /// <returns>

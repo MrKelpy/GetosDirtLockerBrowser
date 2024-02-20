@@ -32,6 +32,10 @@
       "frameworks": {
         "net472": {
           "dependencies": {
+            "Discord.Net": {
+              "target": "Package",
+              "version": "[3.13.1, )"
+            },
             "LaminariaCore-Databases": {
               "target": "Package",
               "version": "[1.2.12, )"
@@ -43,6 +47,10 @@
             "LaminariaCore-Winforms": {
               "target": "Package",
               "version": "[1.0.1, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             }
           }
         }
