@@ -87,6 +87,7 @@ namespace GetosDirtLocker.gui
             this.Controls.Add(this.Frame);
             this.Controls.Add(this.menuStrip1);
             this.Name = "TokenConfigurationInterface";
+            this.Text = "Geto\'s Dirt Locker 2: Electric Boogaloo - Configure Token";
             this.Frame.ResumeLayout(false);
             this.Frame.PerformLayout();
             this.ResumeLayout(false);

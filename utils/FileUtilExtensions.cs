@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace GetosDirtLocker.utils;
@@ -36,11 +37,18 @@ public static class FileUtilExtensions
     {
         List<byte[]> values = new List<byte[]>();
         using BinaryReader s = new BinaryReader(new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read));
-        
-        while (s.PeekChar() != -1)
+
+        try
         {
-            int size = s.ReadInt32();
-            values.Add(s.ReadBytes(size));
+            while (s.PeekChar() != -1)
+            {
+                int size = s.ReadInt32();
+                values.Add(s.ReadBytes(size));
+            }
+        }
+        catch (ArgumentException)
+        {
+            return null;
         }
 
         return values;

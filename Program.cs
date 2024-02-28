@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using GetosDirtLocker.gui;
+using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 
 namespace GetosDirtLocker
@@ -22,9 +20,18 @@ namespace GetosDirtLocker
         [STAThread]
         static void Main()
         {
+            // Checks if the database exists, and if it doesn't, creates it.
+            SQLServerConnector connector = new SQLServerConnector(@".\SQLEXPRESS", "master");
+            SQLDatabaseManager manager = new SQLDatabaseManager(connector);
+            
+            if (!manager.DatabaseExists("DirtLocker"))
+                manager.RunSqlScript("./sql/dirtlocker.sql");
+
+            manager.UseDatabase("DirtLocker");
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Mainframe());
+            Application.Run(new Mainframe(manager));
         }
     }
 }

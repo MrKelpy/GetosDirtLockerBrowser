@@ -1,13 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Management;
+﻿using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using GetosDirtLocker.requests;
-using GetosDirtLocker.utils;
-using LaminariaCore_General.common;
-using LaminariaCore_General.utils;
+using LaminariaCore_Databases.sqlserver;
 
 namespace GetosDirtLocker.gui
 {
@@ -18,14 +13,10 @@ namespace GetosDirtLocker.gui
     {
         
         /// <summary>
-        /// The singleton instance of the class, used to access the form.
-        /// </summary>
-        public static TokenConfigurationInterface Instance { get; } = new ();
-        
-        /// <summary>
         /// General constructor of the class.
         /// </summary>
-        public TokenConfigurationInterface()
+        /// <param name="manager">The database manager used to access and interact with the db</param>
+        public TokenConfigurationInterface(SQLDatabaseManager manager)
         {
             InitializeComponent();
         }

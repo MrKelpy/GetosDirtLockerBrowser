@@ -237,3 +237,4 @@ C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Collections.Im
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Interactive.Async.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Linq.Async.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Reactive.dll
+C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\sql\dirtlocker.sql

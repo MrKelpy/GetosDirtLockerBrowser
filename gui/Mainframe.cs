@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GetosDirtLocker.requests;
 using GetosDirtLocker.utils;
+using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 using LaminariaCore_General.utils;
 using LaminariaCore_Winforms.forms.extensions;
+using Microsoft.SqlServer.Management.Smo;
 
 namespace GetosDirtLocker.gui
 {
@@ -26,11 +28,31 @@ namespace GetosDirtLocker.gui
         /// The singleton instance of the class, used to access the form.
         /// </summary>
         public static Mainframe Instance { get; private set; }
+        
+        /// <summary>
+        /// The database manager used to manage the database of the application.
+        /// </summary>
+        public SQLDatabaseManager Database { get; }
 
         /// <summary>
         /// Whether or not the token needs to be refreshed.
         /// </summary>
         private bool RefreshFlag { get; set; } = true;
+        
+        /// <summary>
+        /// The token configuration interface used to configure the token used to access the Discord API.
+        /// </summary>
+        public static TokenConfigurationInterface TokenInterface { get; set; }
+        
+        /// <summary>
+        /// The dirt lookup interface used to look up dirt in the locker.
+        /// </summary>
+        private static DirtLookupInterface DirtLookup { get; set; }
+        
+        /// <summary>
+        /// The locker addition interface used to add new dirt into the locker.
+        /// </summary>
+        public static LockerAdditionInterface LockerAddition { get; set; }
         
         /// <summary>
         /// The stored token, used to check if the token has changed.
@@ -41,13 +63,21 @@ namespace GetosDirtLocker.gui
         /// The mainframe of the application, working in conjunction with the mainframe system in
         /// the LaminariaCore-Winforms library to provide a single-window GUI for the application.
         /// </summary>
-        public Mainframe()
+        /// <param name="databaseManager">The SQLDatabase manager used throughout the program</param>
+        public Mainframe(SQLDatabaseManager databaseManager)
         {
             InitializeComponent();
             CenterToScreen();
             
+            // Sets the three interfaces into the properties defined above.
+            TokenInterface = new TokenConfigurationInterface(databaseManager);
+            DirtLookup = new DirtLookupInterface(databaseManager);
+            LockerAddition = new LockerAdditionInterface(databaseManager);
+            
             // Set the token configuration interface as the default interface.
-            MainLayout.SetAllFrom(TokenConfigurationInterface.Instance.GetLayout());
+            MainLayout.SetAllFrom(TokenInterface.GetLayout());
+            Mainframe.Instance = this;
+            this.Database = databaseManager;
             
             // Load the token from the file if it exists.
             Section data = Program.FileManager.GetFirstSectionNamed("data");
@@ -58,9 +88,10 @@ namespace GetosDirtLocker.gui
             if (!File.Exists(path)) return;
                 
             // Decrypt the token and set the stored token to it.
-            byte[] token = FileUtilExtensions.ReadBytesFromBinary(path)[0];
+            byte[] token = FileUtilExtensions.ReadBytesFromBinary(path)?[0];
+
+            if (token == null) return;
             this.StoredToken = TokenConfigurationInterface.DecodeToken(token);
-            Mainframe.Instance = this;
         }
         
         /// <summary>
@@ -68,8 +99,8 @@ namespace GetosDirtLocker.gui
         /// </summary>
         private void Mainframe_Load(object sender, EventArgs e)
         {
-            this.Text = TokenConfigurationInterface.Instance.Text;
-            TextBox tokenBox = TokenConfigurationInterface.Instance.TextBoxToken;
+            this.Text = TokenInterface.Text;
+            TextBox tokenBox = TokenInterface.TextBoxToken;
             tokenBox.Text = this.StoredToken;
             
             MainLayout.Focus();
@@ -84,26 +115,28 @@ namespace GetosDirtLocker.gui
             ChangeControlStates(false);  // Preventive disabling of the locker addition controls.
             
             // If the token is invalid, then we disable the locker addition controls.
-            if (!await DiscordInteractions.IsTokenValid(TokenConfigurationInterface.Instance.GetToken()))
+            if (!await DiscordInteractions.UpdateStatesBasedOnToken(TokenInterface.GetToken()))
             {
                 ChangeControlStates(false);
 
                 this.Invoke(() =>
                 {
-                    LockerAdditionInterface.Instance.PictureLoading.Image = Image.FromFile("./assets/warning.png");
-                    TokenConfigurationInterface.Instance.TextBoxToken.Enabled = true;
+                    LockerAddition.PictureLoading.Image = Image.FromFile("./assets/warning.png");
+                    TokenInterface.TextBoxToken.Enabled = true;
+                    Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
                 });
                 
                 RefreshFlag = false;
                 return;
             }
-            
+
             // Load the token file and write the encrypted token to it if it doesn't exist.
             Section data = Program.FileManager.AddSection("data");
             string path = data.AddDocument("token.gl");
                 
-            FileUtilExtensions.DumpBytesToFileBinary(path, [TokenConfigurationInterface.Instance.GetToken()]);
-            this.StoredToken = TokenConfigurationInterface.DecodeToken(TokenConfigurationInterface.Instance.GetToken());
+            FileUtilExtensions.DumpBytesToFileBinary(path, [TokenInterface.GetToken()]);
+            this.StoredToken = TokenConfigurationInterface.DecodeToken(TokenInterface.GetToken());
+            
             RefreshFlag = false;
         }
         
@@ -115,7 +148,7 @@ namespace GetosDirtLocker.gui
         {
             this.Invoke(() =>
             {
-                TokenConfigurationInterface.Instance.TextBoxToken.Enabled = state;
+                TokenInterface.TextBoxToken.Enabled = state;
 
                 foreach (Control control in MainLayout.Controls.OfType<Control>())
                 {
@@ -130,12 +163,12 @@ namespace GetosDirtLocker.gui
         /// </summary>
         private void ToolStripNewEntry_Click(object sender, EventArgs e)
         {
-            this.MainLayout.SetAllFrom(LockerAdditionInterface.Instance.GetLayout());
-            this.Text = LockerAdditionInterface.Instance.Text;
+            this.MainLayout.SetAllFrom(LockerAddition.GetLayout());
+            this.Text = LockerAddition.Text;
             
             if (RefreshFlag)
             {
-                LockerAdditionInterface.Instance.PictureLoading.Image = Image.FromFile("./assets/loader.gif");
+                LockerAddition.PictureLoading.Image = Image.FromFile("./assets/loader.gif");
                 Task.Run(RefreshToken);
             }
             
@@ -147,8 +180,8 @@ namespace GetosDirtLocker.gui
         /// </summary>
         private void ToolStripDirtLookup_Click(object sender, EventArgs e)
         {
-            this.MainLayout.SetAllFrom(DirtLookupInterface.Instance.GetLayout());
-            this.Text = DirtLookupInterface.Instance.Text;
+            this.MainLayout.SetAllFrom(DirtLookup.GetLayout());
+            this.Text = DirtLookup.Text;
         }
 
         /// <summary>
@@ -157,9 +190,15 @@ namespace GetosDirtLocker.gui
         /// </summary>
         private void ToolStripTokenConfig_Click(object sender, EventArgs e)
         {
-            this.MainLayout.SetAllFrom(TokenConfigurationInterface.Instance.GetLayout());
-            this.Text = TokenConfigurationInterface.Instance.Text;
+            this.MainLayout.SetAllFrom(TokenInterface.GetLayout());
+            this.Text = TokenInterface.Text;
             this.RefreshFlag = true;
         }
+
+        /// <summary>
+        /// Reload all entries in both the locker addition interface and the lookup interface.
+        /// </summary>
+        private void reloadEntriesToolStripMenuItem_Click(object sender, EventArgs e) => LockerAddition.ReloadEntries();
+        
     }
 }

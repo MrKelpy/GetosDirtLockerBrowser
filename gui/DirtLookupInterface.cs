@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using LaminariaCore_Databases.sqlserver;
 
 namespace GetosDirtLocker.gui
 {
@@ -9,14 +10,9 @@ namespace GetosDirtLocker.gui
     {
         
         /// <summary>
-        /// The singleton instance of the class, used to access the form.
-        /// </summary>
-        public static DirtLookupInterface Instance { get; } = new DirtLookupInterface();
-        
-        /// <summary>
         /// The main constructor of the class.
         /// </summary>
-        private DirtLookupInterface()
+        public DirtLookupInterface(SQLDatabaseManager manager)
         {
             InitializeComponent();
         }

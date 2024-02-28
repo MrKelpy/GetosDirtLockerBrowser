@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Discord;
@@ -15,15 +16,64 @@ namespace GetosDirtLocker.requests
     {
         
         /// <summary>
-        /// The discord client that is used to interact with the API. Updated with IsTokenValid.
+        /// The discord client that is used to interact with the API. Updated with UpdateStatesBasedOnToken.
         /// </summary>
         public static DiscordSocketClient Client { get; set; }
         
         /// <summary>
-        /// Tries to retrieve the user information through their token, returning a boolean for success.
+        /// Updates all the fields that are dependent on the token to be functional to either be visible or not
+        /// based on whether the token is valid or not.
         /// </summary>
         /// <param name="token">The encrypted token to check.</param>
-        public static async Task<bool> IsTokenValid(byte[] token)
+        public static async Task<bool> UpdateStatesBasedOnToken(byte[] token)
+        {
+            if (!await LoginClient(token)) return false;
+            
+            // Whenever the client is ready, unlock the token configuration interface and load the user's avatar.
+            Client.Ready += () =>
+            {
+                // If the client doesn't, then don't do anything.
+                if (Client.CurrentUser == null) return Task.CompletedTask;
+
+                Mainframe.Instance.Invoke(new MethodInvoker(() =>
+                {
+                    // Get the avatar URL and load it into the picture box.
+                    string avatar_url = Client.CurrentUser.GetAvatarUrl();
+                    Mainframe.LockerAddition.PictureLoading.Load(avatar_url);
+
+                    // Enable the token configuration interface and change the control states.
+                    Mainframe.TokenInterface.TextBoxToken.Enabled = true;
+                    Mainframe.Instance.ChangeControlStates(true);
+                    
+                    Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = true;
+                    Mainframe.LockerAddition.ReloadEntries();
+                }));
+                
+                return Task.CompletedTask;
+            };
+
+            Client.Disconnected += (e) =>
+            {
+                // If the client is disconnected, then we disable the token configuration interface and show a warning.
+                Mainframe.Instance.Invoke(new MethodInvoker(() =>
+                {
+                    Mainframe.LockerAddition.PictureLoading.Image = Image.FromFile("./assets/warning.png");
+                    Mainframe.TokenInterface.TextBoxToken.Enabled = true;
+                    Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
+                }));
+
+                Client.StopAsync();
+                return Task.CompletedTask;
+            };
+            
+            return true;
+        }
+
+        /// <summary>
+        /// Logs in the client with the provided token.
+        /// </summary>
+        /// <param name="token">The byte[] containing the token</param>
+        public static async Task<bool> LoginClient(byte[] token)
         {
             try
             {
@@ -32,46 +82,16 @@ namespace GetosDirtLocker.requests
                 TokenUtils.ValidateToken(TokenType.Bearer, tokenString);
 
                 // Create a new client and log in with the token as a 'bot'
-                DiscordInteractions.Client = new DiscordSocketClient();
-                DiscordInteractions.Client.Log += Log;
+                Client = new DiscordSocketClient();
+                Client.Log += Log;
 
-                await DiscordInteractions.Client.LoginAsync(TokenType.Bot, tokenString, false);
-                await DiscordInteractions.Client.StartAsync();
+                await Client.LoginAsync(TokenType.Bot, tokenString, false);
+                await Client.StartAsync();
             }
-            catch (ArgumentException) { return false; }
-            
-            // Whenever the client is ready, unlock the token configuration interface and load the user's avatar.
-            DiscordInteractions.Client.Ready += () =>
+            catch (ArgumentException)
             {
-                // If the client doesn't, then don't do anything.
-                if (DiscordInteractions.Client.CurrentUser == null) return Task.CompletedTask;
-
-                Mainframe.Instance.Invoke(new MethodInvoker(() =>
-                {
-                    // Get the avatar URL and load it into the picture box.
-                    string avatar_url = DiscordInteractions.Client.CurrentUser.GetAvatarUrl();
-                    LockerAdditionInterface.Instance.PictureLoading.Load(avatar_url);
-
-                    // Enable the token configuration interface and change the control states.
-                    TokenConfigurationInterface.Instance.TextBoxToken.Enabled = true;
-                    Mainframe.Instance.ChangeControlStates(true);
-                }));
-                
-                return Task.CompletedTask;
-            };
-
-            DiscordInteractions.Client.Disconnected += (e) =>
-            {
-                // If the client is disconnected, then we disable the token configuration interface and show a warning.
-                Mainframe.Instance.Invoke(new MethodInvoker(() =>
-                {
-                    LockerAdditionInterface.Instance.PictureLoading.Image = Image.FromFile("./assets/warning.png");
-                    TokenConfigurationInterface.Instance.TextBoxToken.Enabled = true;
-                }));
-
-                DiscordInteractions.Client.StopAsync();
-                return Task.CompletedTask;
-            };
+                return false;
+            }
 
             return true;
         }

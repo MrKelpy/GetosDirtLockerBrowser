@@ -79,6 +79,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="requests\DiscordInteractions.cs" />
         <Compile Include="requests\DiscordUser.cs" />
+        <Compile Include="utils\DirtStorageManager.cs" />
         <Compile Include="utils\FileUtilExtensions.cs" />
         <EmbeddedResource Include="gui\DirtLookupInterface.resx">
           <DependentUpon>DirtLookupInterface.cs</DependentUpon>
@@ -128,7 +129,9 @@
         <Content Include=".\assets\warning.png" Visible="False">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-      <Content Include="sql\dirtlocker.sql" />
+        <Content Include=".\sql\dirtlocker.sql" Visible="True">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
