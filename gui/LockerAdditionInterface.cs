@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GetosDirtLocker.Properties;
 using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
@@ -40,7 +41,7 @@ namespace GetosDirtLocker.gui
         public LockerAdditionInterface(SQLDatabaseManager manager)
         {
             InitializeComponent();
-            PictureBoxPermanentLoading.Image = Program.LoaderImage;
+            PictureBoxPermanentLoading.Image = Resources.loader;
             this.Database = manager;
             this.DirtManager = new DirtStorageManager(Database);
             

@@ -1,7 +1,9 @@
 
 /** Create the database, re-creating it if needed **/
 DROP DATABASE IF EXISTS DirtLocker;
+GO
 CREATE DATABASE DirtLocker;
+GO
 USE DirtLocker;
 
 /** Create the user table, storing the user's id and dirt count, related to dirt **/

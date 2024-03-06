@@ -117,7 +117,7 @@ namespace GetosDirtLocker.gui
 
                 this.Invoke(() =>
                 {
-                    LockerAddition.PictureLoading.Image = Program.LoaderImage;
+                    LockerAddition.PictureLoading.Image = Resources.loader;
                     TokenInterface.TextBoxToken.Enabled = true;
                     Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
                 });
@@ -164,7 +164,7 @@ namespace GetosDirtLocker.gui
             
             if (RefreshFlag)
             {
-                LockerAddition.PictureLoading.Image = Program.LoaderImage;
+                LockerAddition.PictureLoading.Image = Resources.loader;
                 Task.Run(RefreshToken);
             }
         }

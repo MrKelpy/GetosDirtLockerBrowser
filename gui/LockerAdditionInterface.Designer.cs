@@ -39,6 +39,8 @@ namespace GetosDirtLocker.gui
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Frame = new System.Windows.Forms.Panel();
+            this.ButtonCreateBackup = new System.Windows.Forms.Button();
+            this.TextBoxBackupPath = new GetosDirtLocker.controls.BetterTextBox();
             this.LabelEntriesDisplay = new System.Windows.Forms.Label();
             this.PictureBoxPermanentLoading = new System.Windows.Forms.PictureBox();
             this.ButtonApplyFilters = new System.Windows.Forms.Button();
@@ -75,6 +77,8 @@ namespace GetosDirtLocker.gui
             // 
             // Frame
             // 
+            this.Frame.Controls.Add(this.ButtonCreateBackup);
+            this.Frame.Controls.Add(this.TextBoxBackupPath);
             this.Frame.Controls.Add(this.LabelEntriesDisplay);
             this.Frame.Controls.Add(this.PictureBoxPermanentLoading);
             this.Frame.Controls.Add(this.ButtonApplyFilters);
@@ -100,6 +104,25 @@ namespace GetosDirtLocker.gui
             this.Frame.Name = "Frame";
             this.Frame.Size = new System.Drawing.Size(734, 607);
             this.Frame.TabIndex = 0;
+            // 
+            // ButtonCreateBackup
+            // 
+            this.ButtonCreateBackup.Location = new System.Drawing.Point(230, 546);
+            this.ButtonCreateBackup.Name = "ButtonCreateBackup";
+            this.ButtonCreateBackup.Size = new System.Drawing.Size(96, 25);
+            this.ButtonCreateBackup.TabIndex = 36;
+            this.ButtonCreateBackup.Text = "Create Backup";
+            this.ButtonCreateBackup.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxBackupPath
+            // 
+            this.TextBoxBackupPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TextBoxBackupPath.Location = new System.Drawing.Point(332, 546);
+            this.TextBoxBackupPath.Name = "TextBoxBackupPath";
+            this.TextBoxBackupPath.PlaceholderText = "Insert the database backup path here";
+            this.TextBoxBackupPath.PlaceholderTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.TextBoxBackupPath.Size = new System.Drawing.Size(388, 24);
+            this.TextBoxBackupPath.TabIndex = 35;
             // 
             // LabelEntriesDisplay
             // 
@@ -259,7 +282,7 @@ namespace GetosDirtLocker.gui
             this.GridDirt.RowHeadersVisible = false;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.GridDirt.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.GridDirt.Size = new System.Drawing.Size(711, 394);
+            this.GridDirt.Size = new System.Drawing.Size(711, 357);
             this.GridDirt.TabIndex = 10;
             this.GridDirt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDirt_CellClick);
             this.GridDirt.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDirt_CellMouseEnter);
@@ -400,7 +423,7 @@ namespace GetosDirtLocker.gui
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(734, 607);
+            this.ClientSize = new System.Drawing.Size(734, 606);
             this.Controls.Add(this.Frame);
             this.Controls.Add(this.miniToolStrip);
             this.Location = new System.Drawing.Point(15, 15);
@@ -414,6 +437,9 @@ namespace GetosDirtLocker.gui
             ((System.ComponentModel.ISupportInitialize)(this.GeneralErrorProvider)).EndInit();
             this.ResumeLayout(false);
         }
+
+        public GetosDirtLocker.controls.BetterTextBox TextBoxBackupPath;
+        private System.Windows.Forms.Button ButtonCreateBackup;
 
         private System.Windows.Forms.Label LabelEntriesDisplay;
 
