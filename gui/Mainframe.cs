@@ -45,11 +45,6 @@ namespace GetosDirtLocker.gui
         public static TokenConfigurationInterface TokenInterface { get; set; }
         
         /// <summary>
-        /// The dirt lookup interface used to look up dirt in the locker.
-        /// </summary>
-        private static DirtLookupInterface DirtLookup { get; set; }
-        
-        /// <summary>
         /// The locker addition interface used to add new dirt into the locker.
         /// </summary>
         public static LockerAdditionInterface LockerAddition { get; set; }
@@ -70,8 +65,7 @@ namespace GetosDirtLocker.gui
             CenterToScreen();
             
             // Sets the three interfaces into the properties defined above.
-            TokenInterface = new TokenConfigurationInterface(databaseManager);
-            DirtLookup = new DirtLookupInterface(databaseManager);
+            TokenInterface = new TokenConfigurationInterface();
             LockerAddition = new LockerAdditionInterface(databaseManager);
             
             // Set the token configuration interface as the default interface.
@@ -152,7 +146,7 @@ namespace GetosDirtLocker.gui
 
                 foreach (Control control in MainLayout.Controls.OfType<Control>())
                 {
-                    if (control.GetType() == typeof(PictureBox) || control.Name.Contains("Lookup")) continue;
+                    if (control.GetType() == typeof(PictureBox)) continue;
                     control.Enabled = state;
                 }
             });
@@ -168,20 +162,9 @@ namespace GetosDirtLocker.gui
             
             if (RefreshFlag)
             {
-                LockerAddition.PictureLoading.Image = Image.FromFile("./assets/loader.gif");
+                LockerAddition.PictureLoading.Image = Program.LoaderImage;
                 Task.Run(RefreshToken);
             }
-            
-        }
-
-        /// <summary>
-        /// Switches the displayed interface to the dirt lookup interface. If the token refresh flag
-        /// is set, then the token is refreshed.
-        /// </summary>
-        private void ToolStripDirtLookup_Click(object sender, EventArgs e)
-        {
-            this.MainLayout.SetAllFrom(DirtLookup.GetLayout());
-            this.Text = DirtLookup.Text;
         }
 
         /// <summary>
@@ -191,6 +174,7 @@ namespace GetosDirtLocker.gui
         private void ToolStripTokenConfig_Click(object sender, EventArgs e)
         {
             this.MainLayout.SetAllFrom(TokenInterface.GetLayout());
+            this.reloadEntriesToolStripMenuItem.Available = false;
             this.Text = TokenInterface.Text;
             this.RefreshFlag = true;
         }
@@ -198,7 +182,7 @@ namespace GetosDirtLocker.gui
         /// <summary>
         /// Reload all entries in both the locker addition interface and the lookup interface.
         /// </summary>
-        private void reloadEntriesToolStripMenuItem_Click(object sender, EventArgs e) => LockerAddition.ReloadEntries();
+        private async void reloadEntriesToolStripMenuItem_Click(object sender, EventArgs e) => await LockerAddition.ReloadEntries();
         
     }
 }

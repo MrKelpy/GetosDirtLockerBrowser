@@ -1,8 +1,15 @@
-﻿using System.Management;
+﻿using System;
+using System.Configuration;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
+using LaminariaCore_General.common;
 
 namespace GetosDirtLocker.gui
 {
@@ -15,10 +22,38 @@ namespace GetosDirtLocker.gui
         /// <summary>
         /// General constructor of the class.
         /// </summary>
-        /// <param name="manager">The database manager used to access and interact with the db</param>
-        public TokenConfigurationInterface(SQLDatabaseManager manager)
+        public TokenConfigurationInterface()
         {
             InitializeComponent();
+            this.SetRandomAvatars();
+        }
+
+        /// <summary>
+        /// Iterates through the avatar panels and sets a random avatar for each one.
+        /// </summary>
+        private void SetRandomAvatars()
+        {
+            Section avatars = Program.FileManager.AddSection("avatars");
+            string[] avatarCount = Directory.GetFiles(avatars.SectionFullPath);
+            Random random = new();
+            
+            // Sets a random avatar for each avatar slot based on the number of avatars available.
+            foreach (var avatarSlot in AvatarsLayout.Controls.OfType<PictureBox>())
+            {
+                // If there are no avatars, set the default avatar.
+                if (avatarCount.Length <= 0)
+                {
+                    avatarSlot.Load(ConfigurationManager.AppSettings.Get("default-avatar"));
+                    continue;
+                }
+
+                // Chooses a random avatar from the list of avatars and sets it to the slot.
+                string filepath = avatarCount[random.Next(0, avatarCount.Length)];
+                
+                byte[] bytes = File.ReadAllBytes(filepath);
+                MemoryStream ms = new MemoryStream(bytes);
+                avatarSlot.Image = Image.FromStream(ms);
+            }
         }
 
         /// <returns>

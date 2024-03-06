@@ -52,6 +52,21 @@ public class DirtStorageManager
     }
     
     /// <summary>
+    /// Tries to check if the URL is a downloadable picture.
+    /// </summary>
+    /// <param name="url">The URL to check</param>
+    /// <returns>Whether or not the URL is downloadable</returns>
+    public static async Task<bool> UrlIsDownloadablePicture(string url)
+    {
+        try
+        {
+            using WebResponse response = await WebRequest.Create(url).GetResponseAsync();
+            return response.ContentType.Contains("image");
+        }
+        catch (WebException) { return false; }
+    }
+    
+    /// <summary>
     /// Gets the path to the dirt picture, if it exists. If it doesn't, return null.
     /// </summary>
     /// <param name="id">The ID of the picture to search for</param>

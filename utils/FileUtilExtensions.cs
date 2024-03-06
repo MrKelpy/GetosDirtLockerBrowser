@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 
 namespace GetosDirtLocker.utils;
@@ -52,6 +53,18 @@ public static class FileUtilExtensions
         }
 
         return values;
+    }
+    
+    /// <summary>
+    /// Returns a bit-by-bit copy of the file at the specified path made from the file stream.
+    /// </summary>
+    /// <param name="path">The path of the file to copy</param>
+    /// <returns>The Image copy of the file</returns>
+    public static Image GetImageFromFileStream(string path)
+    {
+        byte[] bytes = File.ReadAllBytes(path);
+        MemoryStream ms = new MemoryStream(bytes);
+        return Image.FromStream(ms);
     }
     
 }

@@ -214,7 +214,6 @@ C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.ValueTuple.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.csproj.AssemblyReference.cache
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.csproj.SuggestedBindingRedirects.cache
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.exe.config
-C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.gui.DirtLookupInterface.resources
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.gui.LockerAdditionInterface.resources
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.gui.Mainframe.resources
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.gui.TokenConfigurationInterface.resources

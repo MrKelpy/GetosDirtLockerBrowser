@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Discord;
 using Discord.WebSocket;
 using GetosDirtLocker.gui;
+using GetosDirtLocker.utils;
 using Image = System.Drawing.Image;
 
 namespace GetosDirtLocker.requests
@@ -35,7 +36,7 @@ namespace GetosDirtLocker.requests
                 // If the client doesn't, then don't do anything.
                 if (Client.CurrentUser == null) return Task.CompletedTask;
 
-                Mainframe.Instance.Invoke(new MethodInvoker(() =>
+                Mainframe.Instance.Invoke(new MethodInvoker(async () =>
                 {
                     // Get the avatar URL and load it into the picture box.
                     string avatar_url = Client.CurrentUser.GetAvatarUrl();
@@ -45,8 +46,7 @@ namespace GetosDirtLocker.requests
                     Mainframe.TokenInterface.TextBoxToken.Enabled = true;
                     Mainframe.Instance.ChangeControlStates(true);
                     
-                    Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = true;
-                    Mainframe.LockerAddition.ReloadEntries();
+                    await Mainframe.LockerAddition.ReloadEntries();
                 }));
                 
                 return Task.CompletedTask;
@@ -57,7 +57,7 @@ namespace GetosDirtLocker.requests
                 // If the client is disconnected, then we disable the token configuration interface and show a warning.
                 Mainframe.Instance.Invoke(new MethodInvoker(() =>
                 {
-                    Mainframe.LockerAddition.PictureLoading.Image = Image.FromFile("./assets/warning.png");
+                    Mainframe.LockerAddition.PictureLoading.Image = FileUtilExtensions.GetImageFromFileStream("./assets/warning.png");
                     Mainframe.TokenInterface.TextBoxToken.Enabled = true;
                     Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
                 }));

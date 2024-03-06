@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using GetosDirtLocker.requests;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
+using LaminariaCore_General.utils;
 
 namespace GetosDirtLocker.utils;
 
@@ -110,10 +111,16 @@ public class DiscordUser
         // Copy the response stream to the file stream.
         using Stream responseStream = response.GetResponseStream();
         if (responseStream == null) return null;
-        
-        using FileStream fileStream = new(filepath, FileMode.Create);
-        await responseStream.CopyToAsync(fileStream);
-        
+
+        // Try to copy the stream to the file, and if it fails, return null.
+        try
+        {
+            using FileStream fileStream = new (filepath, FileMode.Create);
+            await responseStream.CopyToAsync(fileStream);
+        }
+        catch (IOException e) { return null; }
+        catch (TimeoutException e) { return null; }
+
         return filepath;
     }
 
@@ -138,8 +145,12 @@ public class DiscordUser
     public string GetNextIndexationID(SQLDatabaseManager database)
     {
         string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
-        int totalDirtCount = database.Select("Dirt").Count;
-        int formattedDate = int.Parse(DateTime.Now.ToString("ddMMyy"));
+        string totalDirtCount = database.Select("Dirt").Count.ToString();
+        string formattedDate = DateTime.Now.ToString("ddMMyy");
+        
+        // Add trailing zeroes to the counts
+        userDirtCount = userDirtCount.Length <= 1 ? $"0{userDirtCount}" : userDirtCount;
+        totalDirtCount = totalDirtCount.Length <= 1 ? $"0{totalDirtCount}" : totalDirtCount;
         
         return $"#{int.Parse(userDirtCount)+1}.{totalDirtCount+1}.{formattedDate}";
     }

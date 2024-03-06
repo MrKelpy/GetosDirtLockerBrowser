@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using GetosDirtLocker.gui;
 using LaminariaCore_Databases.sqlserver;
@@ -13,6 +14,11 @@ namespace GetosDirtLocker
         /// The file management system used to manage the files of the application.
         /// </summary>
         public static FileManager FileManager { get; } = new (".GetosLocker", true);
+
+        /// <summary>
+        /// The loader image used to display the loading process.
+        /// </summary>
+        public static Image LoaderImage { get; } = Image.FromFile("./assets/loader.gif");
         
         /// <summary>
         /// The main entry point for the application.
