@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
+using LaminariaCore_General.common;
 
 namespace GetosDirtLocker.gui
 {
@@ -285,9 +287,21 @@ namespace GetosDirtLocker.gui
             row.DefaultCellStyle.BackColor = Color.White;
         }
         
+        /// <summary>
+        /// Displays an EntryViewingDialog with the selected entry's information
+        /// </summary>
         private void ButtonViewEntry_Click(object sender, EventArgs e)
         {
-            throw new System.NotImplementedException();
+            if (this.SelectedRow == null) return;
+            
+            // Gets the user and the entry data
+            string indexationId = this.SelectedRow.Cells[0].Value.ToString();
+            string[] entry = this.Database.Select("Dirt", $"indexation_id = '{indexationId}'")[0];
+            DiscordUser user = new DiscordUser(entry[1]);
+            
+            // Opens the viewing dialog
+            EntryViewingDialog viewingDialog = new EntryViewingDialog(user, entry, this.DirtManager);
+            viewingDialog.Show();
         }
 
         /// <summary>
@@ -301,10 +315,26 @@ namespace GetosDirtLocker.gui
             string indexationId = this.SelectedRow.Cells[0].Value.ToString();
             string attachmentId = this.Database.Select(["attachment_id"], "Dirt", $"indexation_id = '{indexationId}'")[0][0];
             
+            // Deletes the entry from the database
             this.Database.DeleteFrom("Attachment", $"attachment_id = '{attachmentId}'");
             this.Database.DeleteFrom("Dirt", $"indexation_id = '{indexationId}'");
-            GridDirt.Rows.Remove(this.SelectedRow);
             
+            // Deletes the file from the disk if it exists
+            try { File.Delete(DirtManager.GetDirtPicturePath(attachmentId));
+            } catch (IOException) { }
+            
+            // Checks if this was the last entry of the user and deletes the user from the system if it was
+            string userId = this.SelectedRow.Cells[1].Value.ToString();
+            
+            if (this.Database.Select("Dirt", $"user_id = '{userId}'").Count == 0)
+                this.Database.DeleteFrom("DiscordUser", $"user_id = '{userId}'");
+
+            Section avatarSection = Program.FileManager.GetFirstSectionNamed("avatars");
+            string filepath = avatarSection.GetFirstDocumentNamed($@"{userId}.png");
+            if (filepath != null) File.Delete(filepath);
+
+            // Removes the entry from the DataGridView
+            GridDirt.Rows.Remove(this.SelectedRow);
             this.SelectedRow = null;
         }
         

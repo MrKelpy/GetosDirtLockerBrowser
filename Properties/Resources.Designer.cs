@@ -92,6 +92,16 @@ namespace GetosDirtLocker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap loader {
+            get {
+                object obj = ResourceManager.GetObject("loader", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap megumi {
             get {
                 object obj = ResourceManager.GetObject("megumi", resourceCulture);
@@ -106,6 +116,15 @@ namespace GetosDirtLocker.Properties {
             get {
                 object obj = ResourceManager.GetObject("shoko", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\Resources\warning.png}.
+        /// </summary>
+        internal static string warning {
+            get {
+                return ResourceManager.GetString("warning", resourceCulture);
             }
         }
         

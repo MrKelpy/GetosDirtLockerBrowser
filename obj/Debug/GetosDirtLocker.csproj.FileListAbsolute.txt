@@ -223,8 +223,6 @@ C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.cspro
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.csproj.CopyComplete
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.exe
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.pdb
-C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\assets\loader.gif
-C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\assets\warning.png
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\Discord.Net.Commands.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\Discord.Net.Core.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\Discord.Net.Interactions.dll
@@ -237,3 +235,4 @@ C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Interactive.As
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Linq.Async.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\System.Reactive.dll
 C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\bin\Debug\sql\dirtlocker.sql
+C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\obj\Debug\GetosDirtLocker.gui.EntryViewingDialog.resources

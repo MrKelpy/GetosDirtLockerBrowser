@@ -112,9 +112,9 @@ namespace GetosDirtLocker.gui
             // ButtonApplyFilters
             // 
             this.ButtonApplyFilters.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ButtonApplyFilters.Location = new System.Drawing.Point(69, 138);
+            this.ButtonApplyFilters.Location = new System.Drawing.Point(12, 138);
             this.ButtonApplyFilters.Name = "ButtonApplyFilters";
-            this.ButtonApplyFilters.Size = new System.Drawing.Size(120, 36);
+            this.ButtonApplyFilters.Size = new System.Drawing.Size(229, 36);
             this.ButtonApplyFilters.TabIndex = 20;
             this.ButtonApplyFilters.Text = "Apply Filters";
             this.ButtonApplyFilters.UseVisualStyleBackColor = false;
@@ -137,12 +137,14 @@ namespace GetosDirtLocker.gui
             // 
             // ButtonViewEntry
             // 
+            this.ButtonViewEntry.BackColor = System.Drawing.Color.LemonChiffon;
+            this.ButtonViewEntry.ForeColor = System.Drawing.Color.Black;
             this.ButtonViewEntry.Location = new System.Drawing.Point(247, 138);
             this.ButtonViewEntry.Name = "ButtonViewEntry";
             this.ButtonViewEntry.Size = new System.Drawing.Size(231, 36);
             this.ButtonViewEntry.TabIndex = 17;
             this.ButtonViewEntry.Text = "View Entry";
-            this.ButtonViewEntry.UseVisualStyleBackColor = true;
+            this.ButtonViewEntry.UseVisualStyleBackColor = false;
             this.ButtonViewEntry.Click += new System.EventHandler(this.ButtonViewEntry_Click);
             // 
             // lololool

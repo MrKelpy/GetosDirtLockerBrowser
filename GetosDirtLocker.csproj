@@ -81,6 +81,9 @@
         <Compile Include="requests\DiscordUser.cs" />
         <Compile Include="utils\DirtStorageManager.cs" />
         <Compile Include="utils\FileUtilExtensions.cs" />
+        <EmbeddedResource Include="gui\EntryViewingDialog.resx">
+          <DependentUpon>EntryViewingDialog.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="gui\LockerAdditionInterface.resx">
           <DependentUpon>LockerAdditionInterface.cs</DependentUpon>
         </EmbeddedResource>
@@ -120,20 +123,16 @@
       <PackageReference Include="System.Text.Json" Version="8.0.2" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include=".\assets\loader.gif" Visible="False">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include=".\assets\warning.png" Visible="False">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <Content Include=".\sql\dirtlocker.sql" Visible="True">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="Resources\geto.JPG" />
         <Content Include="Resources\gojo.jpeg" />
         <Content Include="Resources\icon.ico" />
+        <Content Include="Resources\loader.gif" />
         <Content Include="Resources\megumi.jpg" />
         <Content Include="Resources\shoko.jpg" />
+        <Content Include="Resources\warning.png" />
         <Content Include="Resources\yuji2.jpg" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

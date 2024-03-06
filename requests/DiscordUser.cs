@@ -145,14 +145,16 @@ public class DiscordUser
     public string GetNextIndexationID(SQLDatabaseManager database)
     {
         string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
-        string totalDirtCount = database.Select("Dirt").Count.ToString();
+        userDirtCount = (int.Parse(userDirtCount) + 1).ToString();
+        
+        string totalDirtCount = (database.Select("Dirt").Count + 1).ToString();
         string formattedDate = DateTime.Now.ToString("ddMMyy");
         
         // Add trailing zeroes to the counts
         userDirtCount = userDirtCount.Length <= 1 ? $"0{userDirtCount}" : userDirtCount;
         totalDirtCount = totalDirtCount.Length <= 1 ? $"0{totalDirtCount}" : totalDirtCount;
         
-        return $"#{int.Parse(userDirtCount)+1}.{totalDirtCount+1}.{formattedDate}";
+        return $"#{userDirtCount}.{totalDirtCount}.{formattedDate}";
     }
     
     /// <summary>

@@ -7,12 +7,14 @@ using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GetosDirtLocker.Properties;
 using GetosDirtLocker.requests;
 using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 using LaminariaCore_General.utils;
 using LaminariaCore_Winforms.forms.extensions;
+using Microsoft.SqlServer.Management.HadrData;
 using Microsoft.SqlServer.Management.Smo;
 
 namespace GetosDirtLocker.gui
@@ -115,7 +117,7 @@ namespace GetosDirtLocker.gui
 
                 this.Invoke(() =>
                 {
-                    LockerAddition.PictureLoading.Image = Image.FromFile("./assets/warning.png");
+                    LockerAddition.PictureLoading.Image = Program.LoaderImage;
                     TokenInterface.TextBoxToken.Enabled = true;
                     Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
                 });

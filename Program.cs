@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Resources;
 using System.Windows.Forms;
 using GetosDirtLocker.gui;
+using GetosDirtLocker.Properties;
+using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
+using Microsoft.SqlServer.Management.HadrData;
 
 namespace GetosDirtLocker
 {
@@ -18,7 +22,7 @@ namespace GetosDirtLocker
         /// <summary>
         /// The loader image used to display the loading process.
         /// </summary>
-        public static Image LoaderImage { get; } = Image.FromFile("./assets/loader.gif");
+        public static Image LoaderImage { get; } = Resources.loader;
         
         /// <summary>
         /// The main entry point for the application.
