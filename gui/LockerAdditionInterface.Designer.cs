@@ -37,7 +37,9 @@ namespace GetosDirtLocker.gui
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Frame = new System.Windows.Forms.Panel();
+            this.LabelEntriesDisplay = new System.Windows.Forms.Label();
             this.PictureBoxPermanentLoading = new System.Windows.Forms.PictureBox();
             this.ButtonApplyFilters = new System.Windows.Forms.Button();
             this.ButtonDeleteEntry = new System.Windows.Forms.Button();
@@ -73,6 +75,7 @@ namespace GetosDirtLocker.gui
             // 
             // Frame
             // 
+            this.Frame.Controls.Add(this.LabelEntriesDisplay);
             this.Frame.Controls.Add(this.PictureBoxPermanentLoading);
             this.Frame.Controls.Add(this.ButtonApplyFilters);
             this.Frame.Controls.Add(this.ButtonDeleteEntry);
@@ -98,9 +101,20 @@ namespace GetosDirtLocker.gui
             this.Frame.Size = new System.Drawing.Size(734, 607);
             this.Frame.TabIndex = 0;
             // 
+            // LabelEntriesDisplay
+            // 
+            this.LabelEntriesDisplay.Location = new System.Drawing.Point(332, 9);
+            this.LabelEntriesDisplay.Margin = new System.Windows.Forms.Padding(0);
+            this.LabelEntriesDisplay.Name = "LabelEntriesDisplay";
+            this.LabelEntriesDisplay.Size = new System.Drawing.Size(388, 20);
+            this.LabelEntriesDisplay.TabIndex = 22;
+            this.LabelEntriesDisplay.Text = "Now displaying XX entries.";
+            this.LabelEntriesDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // PictureBoxPermanentLoading
             // 
             this.PictureBoxPermanentLoading.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.PictureBoxPermanentLoading.Image = global::GetosDirtLocker.Properties.Resources.loader;
             this.PictureBoxPermanentLoading.Location = new System.Drawing.Point(654, 32);
             this.PictureBoxPermanentLoading.Name = "PictureBoxPermanentLoading";
             this.PictureBoxPermanentLoading.Size = new System.Drawing.Size(46, 46);
@@ -152,7 +166,7 @@ namespace GetosDirtLocker.gui
             this.lololool.Location = new System.Drawing.Point(9, 9);
             this.lololool.Margin = new System.Windows.Forms.Padding(0);
             this.lololool.Name = "lololool";
-            this.lololool.Size = new System.Drawing.Size(711, 20);
+            this.lololool.Size = new System.Drawing.Size(312, 20);
             this.lololool.TabIndex = 16;
             this.lololool.Text = "Enter a new dirt entry";
             this.lololool.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -234,9 +248,17 @@ namespace GetosDirtLocker.gui
             this.GridDirt.MultiSelect = false;
             this.GridDirt.Name = "GridDirt";
             this.GridDirt.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridDirt.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.GridDirt.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.GridDirt.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.GridDirt.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.GridDirt.Size = new System.Drawing.Size(711, 394);
             this.GridDirt.TabIndex = 10;
             this.GridDirt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDirt_CellClick);
@@ -392,6 +414,8 @@ namespace GetosDirtLocker.gui
             ((System.ComponentModel.ISupportInitialize)(this.GeneralErrorProvider)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label LabelEntriesDisplay;
 
         public System.Windows.Forms.PictureBox PictureBoxPermanentLoading;
 

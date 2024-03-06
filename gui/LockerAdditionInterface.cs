@@ -92,8 +92,10 @@ namespace GetosDirtLocker.gui
 
             // The list of contents to add in tasks
             List<Task> taskList = dirtEntries.Select(ProcessEntryAddition).ToList();
-            await Task.WhenAll(taskList);
+            await Task.WhenAll(taskList); 
             
+            string entriesText = dirtEntries.Count == 1 ? "entry" : "entries";
+            LabelEntriesDisplay.Text = $@"Now displaying {dirtEntries.Count} {entriesText}";
             Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = true;
         }
 
@@ -195,6 +197,8 @@ namespace GetosDirtLocker.gui
             
             // Clears the textboxes and sets the addition button to a normal state
             TextBoxUserUUID.Text = TextBoxAttachmentURL.Text = TextBoxAdditionalNotes.Text = "";
+            string entryText = GridDirt.Rows.Count == 1 ? "entry" : "entries";
+            LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} {entryText}";
             this.SetAdditionInLoadingState(false);
         }
         
@@ -310,7 +314,7 @@ namespace GetosDirtLocker.gui
         private void ButtonDeleteEntry_Click(object sender, EventArgs e)
         {
             if (this.SelectedRow == null) return;
-            if (MessageBox.Show(@"Are you sure you want to delete this entry?", @"Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+            if (MessageBox.Show(@"Are you sure you want to delete this entry?", @"Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             
             string indexationId = this.SelectedRow.Cells[0].Value.ToString();
             string attachmentId = this.Database.Select(["attachment_id"], "Dirt", $"indexation_id = '{indexationId}'")[0][0];
