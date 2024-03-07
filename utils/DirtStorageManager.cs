@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -92,6 +93,7 @@ public class DirtStorageManager
         List<string[]> results = this.Database.Select("Attachment", $"attachment_id = '{id}'");
         if (results.Count == 0) return null;
         
+        if (!await UrlIsDownloadablePicture(results[0][2])) return ConfigurationManager.AppSettings.Get("undownloadable-dirt");
         return await this.DownloadDirtPicture(results[0][2], id) ? this.GetDirtPicturePath(id) : null;
     }
     
