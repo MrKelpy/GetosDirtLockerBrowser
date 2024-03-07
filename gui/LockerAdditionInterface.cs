@@ -229,7 +229,7 @@ namespace GetosDirtLocker.gui
             {
                 GridLoadingFlag = false;
                 return;
-            };
+            }
             
             // Resets the previous selected row to the default colour
             if (SelectedRow != null) SelectedRow.DefaultCellStyle.BackColor = Color.White;

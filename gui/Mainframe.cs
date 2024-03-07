@@ -14,6 +14,7 @@ using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 using LaminariaCore_General.utils;
 using LaminariaCore_Winforms.forms.extensions;
+using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Management.HadrData;
 using Microsoft.SqlServer.Management.Smo;
 
