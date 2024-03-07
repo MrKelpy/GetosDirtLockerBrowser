@@ -16,3 +16,6 @@ $ git clone https://github.com/MrKelpy/GetosDirtLocker
 
 2. Install [SQL Server 2022](https://go.microsoft.com/fwlink/p/?linkid=2216019&clcid=0x409&culture=en-us&country=us) and set it up as a basic installation.
 3. If you've installed the locker through the executable, extract it to a folder and keep all the files in it.
+
+### NOTE
+In order to setup the database on a remote server, you must run the program once and navigate to `%appdata%/.GetosLocker/data`. In there, you'll find a `database.cfg` file that configures the host of the database in the following format: `IPADDRESS:PORT:USERNAME:PASSWORD`
