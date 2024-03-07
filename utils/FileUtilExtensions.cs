@@ -60,8 +60,9 @@ public static class FileUtilExtensions
     /// </summary>
     /// <param name="path">The path of the file to copy</param>
     /// <returns>The Image copy of the file</returns>
-    public static Image GetImageFromFileStream(string path)
+    public static Image  GetImageFromFileStream(string path)
     {
+        path = path.Replace('{', ' ').Replace('}', ' ');
         byte[] bytes = File.ReadAllBytes(path);
         MemoryStream ms = new MemoryStream(bytes);
         return Image.FromStream(ms);
