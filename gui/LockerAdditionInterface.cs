@@ -338,8 +338,9 @@ namespace GetosDirtLocker.gui
             string filepath = avatarSection.GetFirstDocumentNamed($@"{userId}.png");
             if (filepath != null) File.Delete(filepath);
 
-            // Removes the entry from the DataGridView
+            // Removes the entry from the DataGridView and decrements the entry count
             GridDirt.Rows.Remove(this.SelectedRow);
+            LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} entries";
             this.SelectedRow = null;
         }
         
