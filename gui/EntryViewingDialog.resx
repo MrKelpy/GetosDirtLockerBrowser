@@ -2590,7 +2590,4 @@
         //8AAP//AAA=
 </value>
   </data>
-  <data name="loader" xml:space="preserve">
-    <value>{C:\dev\CSharp\GetosLockerIndexer\GetosDirtLocker\Resources\loader.gif}</value>
-  </data>
 </root>

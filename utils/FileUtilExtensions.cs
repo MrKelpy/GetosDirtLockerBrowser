@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using GetosDirtLocker.Properties;
 
 namespace GetosDirtLocker.utils;
 
@@ -60,12 +61,19 @@ public static class FileUtilExtensions
     /// </summary>
     /// <param name="path">The path of the file to copy</param>
     /// <returns>The Image copy of the file</returns>
-    public static Image  GetImageFromFileStream(string path)
+    public static Image GetImageFromFileStream(string path)
     {
-        path = path.Replace('{', ' ').Replace('}', ' ');
-        byte[] bytes = File.ReadAllBytes(path);
-        MemoryStream ms = new MemoryStream(bytes);
-        return Image.FromStream(ms);
+        try
+        {
+            path = path.Replace('{', ' ').Replace('}', ' ');
+            byte[] bytes = File.ReadAllBytes(path);
+            MemoryStream ms = new MemoryStream(bytes);
+            return Image.FromStream(ms);
+        }
+        
+        // If there's an issue with the file, return the default image.
+        catch (Exception)
+        { return Resources.nuhuh; }
     }
     
 }

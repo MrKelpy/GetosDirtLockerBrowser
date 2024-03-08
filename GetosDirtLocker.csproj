@@ -132,6 +132,7 @@
         <Content Include="Resources\icon.ico" />
         <Content Include="Resources\loader.gif" />
         <Content Include="Resources\megumi.jpg" />
+        <Content Include="Resources\nuhuh.jpg" />
         <Content Include="Resources\shoko.jpg" />
         <Content Include="Resources\warning.png" />
         <Content Include="Resources\yuji2.jpg" />

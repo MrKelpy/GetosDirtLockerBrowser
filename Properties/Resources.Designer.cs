@@ -112,6 +112,16 @@ namespace GetosDirtLocker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap nuhuh {
+            get {
+                object obj = ResourceManager.GetObject("nuhuh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap shoko {
             get {
                 object obj = ResourceManager.GetObject("shoko", resourceCulture);
