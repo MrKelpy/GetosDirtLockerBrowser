@@ -127,6 +127,7 @@
         <Content Include=".\sql\dirtlocker.sql" Visible="True">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="Resources\copied.png" />
         <Content Include="Resources\geto.JPG" />
         <Content Include="Resources\gojo.jpeg" />
         <Content Include="Resources\icon.ico" />

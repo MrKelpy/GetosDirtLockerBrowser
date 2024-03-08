@@ -245,6 +245,7 @@ namespace GetosDirtLocker.gui
         /// </summary>
         private async void GridDirt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.ColumnIndex == 4) await this.HandleImageToClipboard(e.RowIndex);
             if (e.ColumnIndex != 3) return;
 
             // Gets the clicked cell and the relevant contents
@@ -262,6 +263,25 @@ namespace GetosDirtLocker.gui
             Clipboard.SetData(DataFormats.Text, information);
 
             cell.Value = "Copied to Clipboard";
+            await Task.Delay(1 * 1000);
+            cell.Value = originalContent;
+        }
+        
+        /// <summary>
+        /// Handles the click on the 4th column of the DataGridView, which contains the dirt pictures.
+        /// It copies the image to the clipboard and shows a "Copied" image for a second before reverting back.
+        /// </summary>
+        /// <param name="rowIndex">The index of the row that was clicked on</param>
+        private async Task HandleImageToClipboard(int rowIndex)
+        {
+            // Gets the clicked cell and the relevant contents
+            DataGridViewCell cell = GridDirt.Rows[rowIndex].Cells[4];
+            Image originalContent = (Image) cell.Value;
+
+            if (originalContent == Resources.copied) return;
+            
+            Clipboard.SetImage(originalContent);
+            cell.Value = Resources.copied;
             await Task.Delay(1 * 1000);
             cell.Value = originalContent;
         }
