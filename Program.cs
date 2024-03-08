@@ -2,6 +2,8 @@
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Resources;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using GetosDirtLocker.gui;
 using GetosDirtLocker.Properties;
@@ -51,11 +53,12 @@ namespace GetosDirtLocker
                 
                 SQLDatabaseManager manager = new SQLDatabaseManager(connector);
 
-                if (!manager.DatabaseExists("DirtLocker"))
+                if (manager.DatabaseExists("DirtLocker"))
                     manager.RunSqlScript("./sql/dirtlocker.sql");
 
                 manager.UseDatabase("DirtLocker");
-                
+                new Thread(EnsureNetworkThread).Start();
+                    
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Mainframe(manager));
@@ -63,6 +66,25 @@ namespace GetosDirtLocker
             catch (SqlException e)
             {
                 MessageBox.Show($"An error occurred while trying to connect to the database on {host}. Please check the database host and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Ensures that there's always a network connection present, and stops the program
+        /// if there isn't.
+        /// </summary>
+        public static void EnsureNetworkThread()
+        {
+            while (true)
+            {
+                if (!NetworkUtils.IsWifiConnected())
+                {
+                    Mainframe.Instance.Close();
+                    MessageBox.Show($@"Lost connection to the internet. {Environment.NewLine}Please connect to a network and try again.", @"Geto's Dirt Locker - Network Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Environment.Exit(0);
+                }
+                
+                Thread.Sleep(1*1000);  // Sleep for 1 second.
             }
         }
     }

@@ -59,9 +59,10 @@ namespace GetosDirtLocker.requests
                 // If the client is disconnected, then we disable the token configuration interface and show a warning.
                 Mainframe.Instance.Invoke(new MethodInvoker(() =>
                 {
-                    Mainframe.LockerAddition.PictureLoading.Image = FileUtilExtensions.GetImageFromFileStream(Resources.warning);
                     Mainframe.TokenInterface.TextBoxToken.Enabled = true;
+                    Mainframe.Instance.ChangeControlStates(false);
                     Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
+                    Mainframe.LockerAddition.PictureLoading.Image = FileUtilExtensions.GetImageFromFileStream(Resources.warning);
                 }));
 
                 Client.StopAsync();

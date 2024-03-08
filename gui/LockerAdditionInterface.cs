@@ -10,6 +10,7 @@ using GetosDirtLocker.Properties;
 using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
+using LaminariaCore_General.utils;
 
 namespace GetosDirtLocker.gui
 {
@@ -143,7 +144,7 @@ namespace GetosDirtLocker.gui
         {
             this.SetAdditionInLoadingState(true);
             GeneralErrorProvider.Clear();
-
+ 
             if (!ulong.TryParse(TextBoxUserUUID.Text, out ulong _))
             {
                 GeneralErrorProvider.SetError(TextBoxUserUUID, "Wrongly formatted UUID (Numbers only!)");
