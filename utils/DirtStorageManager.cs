@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
+using LaminariaCore_General.utils;
 
 namespace GetosDirtLocker.utils;
 
@@ -22,14 +23,23 @@ public class DirtStorageManager
     /// <summary>
     /// The database manager used to access and interact with the db
     /// </summary>
-    public SQLDatabaseManager Database { get; }
+    private SQLDatabaseManager Database { get; }
     
     /// <summary>
-    /// General constructor of the class, set the database manager.
+    /// The image accessor used to manage the images in the database
+    /// </summary>
+    private DatabaseImageAccessor DatabaseImageAccessor { get; }
+
+    /// <summary>
+    /// General constructor of the class, set the database manager and the image accessor
     /// </summary>
     /// <param name="manager">The database manager used throughout the program</param>
-    public DirtStorageManager(SQLDatabaseManager manager) => this.Database = manager;
-    
+    public DirtStorageManager(SQLDatabaseManager manager)
+    {
+        this.Database = manager;
+        this.DatabaseImageAccessor = new DatabaseImageAccessor(manager);
+    }
+
     /// <summary>
     /// Downloads the dirt picture from the given URL and stores it in the dirt storage section under a name equal
     /// to the attachment ID.
@@ -86,15 +96,36 @@ public class DirtStorageManager
     /// <returns>The filepath to the picture</returns>
     public async Task<string> GetDirtPicture(string id)
     {
-        // If the picture return the path to it.
+        // If the picture exists return the path to it.
         if (this.GetDirtPicturePath(id) is { } path) return path;
-        
+
+        // If the picture exists in the database, but not in the storage, download it.
+        if (DatabaseImageAccessor.DirtImageExists(id))
+        {
+            string filepath = DirtStorageSection.AddDocument($"{id}.png");
+            
+            using FileStream fileStream = new(filepath, FileMode.OpenOrCreate);
+            byte[] image = DatabaseImageAccessor.GetDirtImage(id);
+            await fileStream.WriteAsync(image, 0, image.Length);
+            return filepath;
+        }
+
         // If the picture doesn't exist, get the URL from the database and download it.
         List<string[]> results = this.Database.Select("Attachment", $"attachment_id = '{id}'");
         if (results.Count == 0) return null;
         
         if (!await UrlIsDownloadablePicture(results[0][2])) return ConfigurationManager.AppSettings.Get("undownloadable-dirt");
-        return await this.DownloadDirtPicture(results[0][2], id) ? this.GetDirtPicturePath(id) : null;
+        
+        // If the picture is downloadable, download it and add it to the database.
+        // At this point, the picture doesn't exist in the storage or database, so we can download it.
+        string downloadedFilepath = await this.DownloadDirtPicture(results[0][2], id) ? this.GetDirtPicturePath(id) : null;
+        
+        // Can never be too sure. Check for null.
+        if (downloadedFilepath is null) return ConfigurationManager.AppSettings.Get("undownloadable-dirt");
+        
+        // Add the picture to the database.
+        await DatabaseImageAccessor.AddDirtImageToDatabase(id, downloadedFilepath);
+        return downloadedFilepath;
     }
     
 }

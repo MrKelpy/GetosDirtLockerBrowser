@@ -48,7 +48,7 @@ namespace GetosDirtLocker.requests
                     Mainframe.TokenInterface.TextBoxToken.Enabled = true;
                     Mainframe.Instance.ChangeControlStates(true);
                     
-                    await Mainframe.LockerAddition.ReloadEntries();
+                    await Mainframe.LockerAddition.ReloadEntriesAsync();
                 }));
                 
                 return Task.CompletedTask;

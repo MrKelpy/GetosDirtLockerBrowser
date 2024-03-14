@@ -27,13 +27,19 @@ public partial class EntryViewingDialog : Form
     private DirtStorageManager DirtManager { get; }
     
     /// <summary>
+    /// The database image accessor used to manage database image storage tables.
+    /// </summary>
+    private DatabaseImageAccessor ImageAccessor { get; }
+    
+    /// <summary>
     /// General constructor for the EntryViewingDialog. Sets up the user and indexationID properties as well
     /// as the page title.
     /// </summary>
     /// <param name="user">The discord user associated to this entry</param>
     /// <param name="entry">The database row entry data</param>
     /// <param name="dirtManager">The dirt storage manager used to retrieve the dirt information</param>
-    public EntryViewingDialog(DiscordUser user, string[] entry, DirtStorageManager dirtManager)
+    /// <param name="accessor">The database image accessor used to manage database image storage tables</param>
+    public EntryViewingDialog(DiscordUser user, string[] entry, DirtStorageManager dirtManager, DatabaseImageAccessor accessor)
     {
         InitializeComponent(); 
         this.Text += entry[0];  // Sets the title of the form to the dirt's indexationID
@@ -41,6 +47,7 @@ public partial class EntryViewingDialog : Form
         this.User = user;
         this.DatabaseEntry = entry;
         this.DirtManager = dirtManager;
+        this.ImageAccessor = accessor;
     }
 
     /// <summary>
@@ -50,7 +57,7 @@ public partial class EntryViewingDialog : Form
     {
         this.CenterToParent();
         PictureDirt.Image = FileUtilExtensions.GetImageFromFileStream(await DirtManager.GetDirtPicture(DatabaseEntry[2]));
-        PictureBoxAvatar.Image = FileUtilExtensions.GetImageFromFileStream(await User.GetUserAvatar());
+        PictureBoxAvatar.Image = FileUtilExtensions.GetImageFromFileStream(await User.GetUserAvatar(ImageAccessor));
         
         string additionalInfo = DatabaseEntry[4].Length > 0 ? $@"{Environment.NewLine}Additional Information:{Environment.NewLine} {DatabaseEntry[4]}" : string.Empty;
 

@@ -7,7 +7,6 @@ using Discord.WebSocket;
 using GetosDirtLocker.requests;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
-using LaminariaCore_General.utils;
 
 namespace GetosDirtLocker.utils;
 
@@ -51,55 +50,76 @@ public class DiscordUser
     /// <summary>
     /// Gets the information string to be displayed in the locker.
     /// </summary>
-    /// <param name="indexationID">The indexation ID to include in the string</param>
+    /// <param name="entry">The entry string[] with all the information about a given dirt</param>
     /// <param name="discord">Whether to format the text with discord's characters or not</param>
-    /// <param name="database">The database manager used to access the database and query the information</param>
-    /// <returns>A string containing info about the user</returns>
-    public string GetInformationString(SQLDatabaseManager database, string indexationID = "", bool discord = false)
+    /// <returns></returns>
+    public string GetInformationString(string[] entry, bool discord = false)
     {
         string message = string.Empty;  // The message to return
         string nl = Environment.NewLine;
-        string[] dirtEntry = database.Select("Dirt", $"indexation_id = '{indexationID}'")[0];
         
         if (discord) message += $"**User Mention**: <@{this.Uuid}>{nl}";  // Add the user mention if its discord-formatted
         message += discord ? $"**UUID**: `{this.Uuid}`{nl}" : $"UUID: {this.Uuid}{nl}";  // Adds the uuid
         
         // Gets the username and adds it to the message
-        string username = dirtEntry[3];
+        string username = entry[3];
         message += discord ? $"**Username**: `{username}`{nl}" : $"Username: {username}{nl}";
         
         // Adds the indexation ID to the message
-        message += discord ? $"**Indexation ID**: `{indexationID}`{nl}" : $"Indexation ID: {indexationID}{nl}";
+        message += discord ? $"**Indexation ID**: `{entry[0]}`{nl}" : $"Indexation ID: {entry[0]}{nl}";
         
         // Adds the additional information to the message
-        if (indexationID == string.Empty) return message;
-        message += discord ? $"{nl}**Additional Notes**: `{dirtEntry[4]}`" : $"{nl}Additional Notes: {dirtEntry[4]}";
+        if (entry[0] == string.Empty) return message;
+        message += discord ? $"{nl}**Additional Notes**: `{entry[4]}`" : $"{nl}Additional Notes: {entry[4]}";
 
         return message;
+        
+    }
+
+    /// <summary>
+    /// Gets the information string to be displayed in the locker.
+    /// </summary>
+    /// <param name="database">The database manager used to access the database and query the information</param>
+    /// <param name="indexationID">The indexation ID to include in the string</param>
+    /// <param name="discord">Whether to format the text with discord's characters or not</param>
+    /// <returns>A string containing info about the user</returns>
+    public string GetInformationString(SQLDatabaseManager database, string indexationID, bool discord = false)
+    {
+        string[] dirtEntry = database.Select("Dirt", $"indexation_id = '{indexationID}'")[0];
+        return this.GetInformationString(dirtEntry, discord);
     }
 
     /// <summary>
     /// Gets the path to the user's avatar, downloading it from the discord API and storing it in the cache.
     /// </summary>
+    /// <param name="accessor">The Database Image Accessor used to get, add and manage the images on the database storage tables</param>
     /// <returns>The avatar url of the account bound to this object</returns>
-    public async Task<string> GetUserAvatar()
+    public async Task<string> GetUserAvatar(DatabaseImageAccessor accessor)
     {
-        // If the user doesn't exist, return null.
-        if (await this.GetUserFromID() is not { } user) return null;
         Section avatarsSection = Program.FileManager.AddSection("avatars");
+        string expectedPath = avatarsSection.SectionFullPath + $"/{this.Uuid}.png";
         
         // If the avatar is already downloaded, return the path to the file.
-        if (File.Exists(avatarsSection.SectionFullPath + $"/{this.Uuid}.png"))
-            return avatarsSection.SectionFullPath + $"/{this.Uuid}.png";
+        if (File.Exists(expectedPath)) return expectedPath;
         
-        return await this.DownloadUserAvatar();
+        // If the avatar isn't present in the filesystem, check if it is in the database.
+        if (accessor.AvatarImageExists(this.Uuid.ToString()))
+        {
+            using FileStream fileStream = new(expectedPath, FileMode.OpenOrCreate);
+            byte[] image = accessor.GetAvatarImage(this.Uuid.ToString());
+            await fileStream.WriteAsync(image, 0, image.Length);
+            return expectedPath;
+        }
+        
+        return await this.DownloadUserAvatar(accessor);
     }
     
     /// <summary>
     /// Downloads the user's avatar and returns the path to the file.
     /// </summary>
+    /// <param name="accessor">The Database Image Accessor used to get, add and manage the images on the database storage tables</param>
     /// <returns>The path to the just-downloaded file</returns>
-    public async Task<string> DownloadUserAvatar()
+    public async Task<string> DownloadUserAvatar(DatabaseImageAccessor accessor)
     {
         Section avatarsSection = Program.FileManager.AddSection("avatars");
         IUser user = await this.GetUserFromID();
@@ -121,6 +141,7 @@ public class DiscordUser
         catch (IOException e) { return null; }
         catch (TimeoutException e) { return null; }
 
+        await accessor.AddAvatarImageToDatabase(this.Uuid.ToString(), filepath);
         return filepath;
     }
 

@@ -185,7 +185,7 @@ namespace GetosDirtLocker.gui
         /// <summary>
         /// Reload all entries in both the locker addition interface and the lookup interface.
         /// </summary>
-        private async void reloadEntriesToolStripMenuItem_Click(object sender, EventArgs e) => await LockerAddition.ReloadEntries();
+        private async void reloadEntriesToolStripMenuItem_Click(object sender, EventArgs e) => await LockerAddition.ReloadEntriesAsync();
         
     }
 }

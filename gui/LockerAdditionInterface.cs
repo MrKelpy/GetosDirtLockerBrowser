@@ -11,6 +11,7 @@ using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 using LaminariaCore_General.utils;
+using Microsoft.SqlServer.Management.Sdk.Sfc;
 
 namespace GetosDirtLocker.gui
 {
@@ -31,6 +32,11 @@ namespace GetosDirtLocker.gui
         private DirtStorageManager DirtManager { get; }
         
         /// <summary>
+        /// The image accessor used to manage the images in the database
+        /// </summary>
+        private DatabaseImageAccessor ImageAccessor { get; }
+        
+        /// <summary>
         /// The currently selected row in the DataGridView
         /// </summary>
         private DataGridViewRow SelectedRow { get; set; }
@@ -45,6 +51,7 @@ namespace GetosDirtLocker.gui
             PictureBoxPermanentLoading.Image = Resources.loader;
             this.Database = manager;
             this.DirtManager = new DirtStorageManager(Database);
+            this.ImageAccessor = new DatabaseImageAccessor(Database);
             
             GridDirt.RowTemplate.Height = 100;
             GridDirt.ClearSelection();
@@ -82,19 +89,32 @@ namespace GetosDirtLocker.gui
         /// <summary>
         /// Add all the entries into the DataGridView
         /// </summary>
-        public async Task ReloadEntries()
+        public async Task ReloadEntriesAsync()
         { 
+            // Clears the grid and the selection
+            GridDirt.Rows.Clear();
+            this.ForceClearSelections();
+            
             // Get all the dirt entries existent in the database and initialise an array for the rows
             Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
             List<string[]> dirtEntries = GetFilteredEntries();
 
             dirtEntries.Reverse();
-            GridDirt.Rows.Clear();
-            this.ForceClearSelections();
 
-            // The list of contents to add in tasks
-            List<Task> taskList = dirtEntries.Select(ProcessEntryAddition).ToList();
-            await Task.WhenAll(taskList); 
+            // Gets all of the rows to be added asynchronously and initialises the task list
+            DataGridViewRow rowTemplate = (DataGridViewRow) GridDirt.RowTemplate.Clone();
+            List<Task<DataGridViewRow>> taskList = new List<Task<DataGridViewRow>>();
+            
+            // Adds all the rows to the task list
+            foreach (var entry in dirtEntries)
+            {
+                Task<DataGridViewRow> task = ProcessEntryAdditionAsync(entry, rowTemplate);
+                taskList.Add(task);
+            }
+
+            // Awaits all the tasks and adds the rows to the DataGridView
+            DataGridViewRow[] rows = await Task.WhenAll(taskList);
+            GridDirt.Rows.AddRange(rows);
             
             string entriesText = dirtEntries.Count == 1 ? "entry" : "entries";
             LabelEntriesDisplay.Text = $@"Now displaying {dirtEntries.Count} {entriesText}";
@@ -122,19 +142,34 @@ namespace GetosDirtLocker.gui
         /// Handles the asynchronous addition of content into the DataGridView
         /// </summary>
         /// <param name="entry">The entry information to add into the grid</param>
-        private async Task ProcessEntryAddition(string[] entry)
+        /// <param name="rowTemplate">The template to add the row as</param>
+        private async Task<DataGridViewRow> ProcessEntryAdditionAsync(string[] entry, DataGridViewRow rowTemplate)
         {
-            DiscordUser user = new DiscordUser(entry[1]);
-            string informationString = user.GetInformationString(this.Database, entry[0]);
+            return await Task.Run(async () =>
+            {
+                // Gets a newly connected manager for this async thread
+                SQLDatabaseManager manager = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+                manager.UseDatabase("DirtLocker");
                 
-            // Gets the attachment ID from the indexation ID
-            List<string[]> result = this.Database.Select(["attachment_id"], "Dirt", $"indexation_id = '{entry[0]}'");
-            string dirtPath = await DirtManager.GetDirtPicture(result[0][0]);
-            
-            // Creates a DataGridViewRow and add it to the gridContents array
-            Image userAvatar = FileUtilExtensions.GetImageFromFileStream(await user.GetUserAvatar());
-            Image dirtImage = FileUtilExtensions.GetImageFromFileStream(dirtPath);
-            GridDirt.Rows.Add( entry[0], entry[1], userAvatar, informationString, dirtImage);
+                DiscordUser user = new DiscordUser(entry[1]);
+                string informationString = user.GetInformationString(entry);
+                rowTemplate = (DataGridViewRow) rowTemplate.Clone();
+
+                // Gets the attachment ID from the indexation ID
+                string dirtPath = await DirtManager.GetDirtPicture(entry[2]);
+
+                // Creates a DataGridViewRow and add it to the gridContents array
+                Image userAvatar = FileUtilExtensions.GetImageFromFileStream(await user.GetUserAvatar(ImageAccessor));
+                Image dirtImage = FileUtilExtensions.GetImageFromFileStream(dirtPath);
+
+                rowTemplate?.CreateCells(GridDirt, entry[0], entry[1], userAvatar, informationString, dirtImage);
+                
+                // Disposes of the database connection
+                manager.Connector.Disconnect();
+                manager.Connector.Dispose();
+                
+                return rowTemplate;
+            });
         }
 
         /// <summary>
@@ -193,7 +228,7 @@ namespace GetosDirtLocker.gui
             // Inserts the dirt entry into the DataGridView
             string dirtPath = await DirtManager.GetDirtPicture(attachmentID);
 
-            Image userAvatarCopy = FileUtilExtensions.GetImageFromFileStream(await user.DownloadUserAvatar());
+            Image userAvatarCopy = FileUtilExtensions.GetImageFromFileStream(await user.DownloadUserAvatar(ImageAccessor));
             Image dirtImageCopy = FileUtilExtensions.GetImageFromFileStream(dirtPath);
             GridDirt.Rows.Insert(0, indexationID, user.Uuid, userAvatarCopy, informationString, dirtImageCopy);
             
@@ -202,6 +237,10 @@ namespace GetosDirtLocker.gui
             string entryText = GridDirt.Rows.Count == 1 ? "entry" : "entries";
             LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} {entryText}";
             this.SetAdditionInLoadingState(false);
+            
+            // Updates the database with the new profile picture
+            Section avatarSection = Program.FileManager.GetFirstSectionNamed("avatars");
+            await ImageAccessor.UpdateAvatarImageInDatabase(user.Uuid.ToString(), avatarSection.AddDocument(user.Uuid + ".png"));
         }
         
         /// <summary>
@@ -326,7 +365,7 @@ namespace GetosDirtLocker.gui
             DiscordUser user = new DiscordUser(entry[1]);
             
             // Opens the viewing dialog
-            EntryViewingDialog viewingDialog = new EntryViewingDialog(user, entry, this.DirtManager);
+            EntryViewingDialog viewingDialog = new EntryViewingDialog(user, entry, this.DirtManager, this.ImageAccessor);
             viewingDialog.Show();
         }
 
@@ -351,9 +390,12 @@ namespace GetosDirtLocker.gui
             
             // Checks if this was the last entry of the user and deletes the user from the system if it was
             string userId = this.SelectedRow.Cells[1].Value.ToString();
-            
+
             if (this.Database.Select("Dirt", $"user_id = '{userId}'").Count == 0)
+            {
+                this.Database.DeleteFrom("AvatarStorage", $"user_id = '{userId}'");
                 this.Database.DeleteFrom("DiscordUser", $"user_id = '{userId}'");
+            }
 
             Section avatarSection = Program.FileManager.GetFirstSectionNamed("avatars");
             string filepath = avatarSection.GetFirstDocumentNamed($@"{userId}.png");
@@ -363,6 +405,7 @@ namespace GetosDirtLocker.gui
             GridDirt.Rows.Remove(this.SelectedRow);
             LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} entries";
             this.SelectedRow = null;
+            
         }
         
         /// <summary>
@@ -373,7 +416,7 @@ namespace GetosDirtLocker.gui
         {
             ButtonApplyFilters.Text = @"Loading...";
             ButtonApplyFilters.Enabled = false;
-            await ReloadEntries();
+            await ReloadEntriesAsync();
             ButtonApplyFilters.Enabled = true;
             ButtonApplyFilters.Text = @"Apply Filters";
         }

@@ -37,3 +37,23 @@ CREATE TABLE [Attachment]
 
 	primary key (attachment_id)
 );
+
+/** Create the attachment storage table, storing the attachment's content, related to attachment 
+    Having it this way helps keep the tables relatively lightweight whilst the only heavy lookup is done when the attachment is requested
+  **/
+CREATE TABLE [AttachmentStorage] 
+(
+    content_id INT NOT NULL,
+    content       VARBINARY(MAX) NOT NULL,
+    
+    FOREIGN KEY (content_id) REFERENCES [Attachment](attachment_id)
+);
+
+/** Create the avatar storage table, storing the avatar's content, related to dirt **/
+CREATE TABLE [AvatarStorage]
+(
+    content_id    VARCHAR(255) NOT NULL,
+    content       VARBINARY(MAX) NOT NULL,
+    
+    FOREIGN KEY (content_id) REFERENCES [DiscordUser](user_id)
+);
