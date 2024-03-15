@@ -195,6 +195,16 @@ public class DiscordUser
     public void IncrementTotalDirtCount(SQLDatabaseManager database)
     {
         string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
-        database.Update("DiscordUser", $"user_total", int.Parse(userDirtCount)+1);
+        database.Update("DiscordUser", $"user_total", int.Parse(userDirtCount)+1, $"user_id = '{this.Uuid}'");
+    }
+    
+    /// <summary>
+    /// <param name="database">The database manager to add the user with</param>
+    /// </summary>
+    /// <param name="database"></param>
+    public void DecrementTotalDirtCount(SQLDatabaseManager database)
+    {
+        string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
+        database.Update("DiscordUser", $"user_total", int.Parse(userDirtCount)-1, $"user_id = '{this.Uuid}'");
     }
 }

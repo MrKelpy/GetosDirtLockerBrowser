@@ -39,6 +39,7 @@ public class DatabaseImageAccessor
             // Read the specified file data and create the command in a new connection.
             byte[] data = File.ReadAllBytes(path);
             SQLDatabaseManager manager = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+            manager.UseDatabase("DirtLocker");
             
             using SqlCommand command = new($"INSERT INTO {table} VALUES (@id, @data)", manager.Connector.Connection);
 
@@ -70,6 +71,14 @@ public class DatabaseImageAccessor
             // Read the specified file data and create the command in a new connection.
             byte[] data = File.ReadAllBytes(path);
             SQLDatabaseManager manager = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+            manager.UseDatabase("DirtLocker");
+
+            // If the image does not exist, add it to the database instead.
+            if (!ImageExists(id, table))
+            {
+                this.AddImageToDatabase(id, path, table);
+                return Task.CompletedTask;
+            }
             
             using SqlCommand command = new($"UPDATE {table} SET content = @data WHERE content_id = @id", manager.Connector.Connection);
 

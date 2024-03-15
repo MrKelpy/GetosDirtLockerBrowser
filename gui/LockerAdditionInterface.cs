@@ -205,6 +205,14 @@ namespace GetosDirtLocker.gui
                 return;
             }
             
+            // Checks if the same attachment URL is already in the database
+            if (this.Database.Select("Attachment", $"attachment_url = '{TextBoxAttachmentURL.Text}'").Count > 0)
+            {
+                GeneralErrorProvider.SetError(TextBoxAttachmentURL, "This attachment is already registered.");
+                this.SetAdditionInLoadingState(false);
+                return;
+            }
+            
             user.AddToDatabase(this.Database);  // Adds the user to the database if they don't exist.
             
             string indexationID = user.GetNextIndexationID(this.Database);
@@ -241,6 +249,7 @@ namespace GetosDirtLocker.gui
             // Updates the database with the new profile picture
             Section avatarSection = Program.FileManager.GetFirstSectionNamed("avatars");
             await ImageAccessor.UpdateAvatarImageInDatabase(user.Uuid.ToString(), avatarSection.AddDocument(user.Uuid + ".png"));
+            await ImageAccessor.UpdateDirtImageInDatabase(attachmentID, dirtPath);
         }
         
         /// <summary>
@@ -381,6 +390,7 @@ namespace GetosDirtLocker.gui
             string attachmentId = this.Database.Select(["attachment_id"], "Dirt", $"indexation_id = '{indexationId}'")[0][0];
             
             // Deletes the entry from the database
+            this.Database.DeleteFrom("AttachmentStorage", $"content_id = '{attachmentId}'");
             this.Database.DeleteFrom("Attachment", $"attachment_id = '{attachmentId}'");
             this.Database.DeleteFrom("Dirt", $"indexation_id = '{indexationId}'");
             
@@ -390,10 +400,11 @@ namespace GetosDirtLocker.gui
             
             // Checks if this was the last entry of the user and deletes the user from the system if it was
             string userId = this.SelectedRow.Cells[1].Value.ToString();
+            new DiscordUser(userId).DecrementTotalDirtCount(Database);  // Decrements the total dirt count of the user
 
             if (this.Database.Select("Dirt", $"user_id = '{userId}'").Count == 0)
             {
-                this.Database.DeleteFrom("AvatarStorage", $"user_id = '{userId}'");
+                this.Database.DeleteFrom("AvatarStorage", $"content_id = '{userId}'");
                 this.Database.DeleteFrom("DiscordUser", $"user_id = '{userId}'");
             }
 
@@ -405,7 +416,6 @@ namespace GetosDirtLocker.gui
             GridDirt.Rows.Remove(this.SelectedRow);
             LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} entries";
             this.SelectedRow = null;
-            
         }
         
         /// <summary>
