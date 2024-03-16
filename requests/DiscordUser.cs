@@ -4,11 +4,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using GetosDirtLocker.requests;
+using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 
-namespace GetosDirtLocker.utils;
+namespace GetosDirtLocker.requests;
 
 /// <summary>
 /// This class represents a discord user and implements many useful methods to access the discord API and retrieve
@@ -126,7 +126,9 @@ public class DiscordUser
         
         // Create the file path and download the avatar.
         string filepath = avatarsSection.SectionFullPath + $"/{this.Uuid}.png";
-        using WebResponse response = await WebRequest.Create(user.GetAvatarUrl()).GetResponseAsync();
+        string avatarUrl = user.GetAvatarUrl() ?? $"https://cdn.discordapp.com/embed/avatars/{new Random().Next(0, 5)}.png";
+        
+        using WebResponse response = await WebRequest.Create(avatarUrl).GetResponseAsync();
         
         // Copy the response stream to the file stream.
         using Stream responseStream = response.GetResponseStream();
