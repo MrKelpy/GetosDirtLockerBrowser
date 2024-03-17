@@ -117,6 +117,21 @@ namespace GetosDirtLocker
         }
 
         /// <summary>
+        /// Checks if the network is connected, with 5 attempts of tolerance.
+        /// </summary>
+        /// <param name="tries">The amount of tries to attempt before exiting</param>
+        static bool CheckConnection(int tries = 0)
+        {
+            // Pings google to check if the network is connected.
+            bool isConnected = NetworkUtils.IsWifiConnected();
+                
+            if (!isConnected && tries >= 5) return false;
+                
+            if (!isConnected) return CheckConnection(++tries);
+            return true;
+        }
+
+        /// <summary>
         /// Ensures that there's always a network connection present, and stops the program
         /// if there isn't.
         /// </summary>
@@ -124,14 +139,13 @@ namespace GetosDirtLocker
         {
             while (true)
             {
-                if (!NetworkUtils.IsWifiConnected())
-                {
-                    Mainframe.Instance.Invoke( new MethodInvoker(() => Mainframe.Instance.Close()));
-                    MessageBox.Show($@"Lost connection to the internet. {Environment.NewLine}Please connect to a network and try again.", @"Geto's Dirt Locker - Network Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    Environment.Exit(0);
-                }
+                if (CheckConnection()) continue;
                 
-                Thread.Sleep(1*1000);  // Sleep for 1 second.
+                // If the network isn't connected, show an error message and close the application.
+                Mainframe.Instance.Invoke( new MethodInvoker(() => Mainframe.Instance.Close()));
+                MessageBox.Show($@"Lost connection to the internet. {Environment.NewLine}Please connect to a network and try again.", @"Geto's Dirt Locker - Network Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Environment.Exit(0);
+                return;
             }
         }
         

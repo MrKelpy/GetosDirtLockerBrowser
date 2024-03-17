@@ -58,11 +58,11 @@
         <Compile Include="gui\EntryViewingDialog.Designer.cs">
           <DependentUpon>EntryViewingDialog.cs</DependentUpon>
         </Compile>
-        <Compile Include="gui\LockerAdditionInterface.cs">
+        <Compile Include="gui\LockerInterface.cs">
           <SubType>Form</SubType>
         </Compile>
-        <Compile Include="gui\LockerAdditionInterface.Designer.cs">
-          <DependentUpon>LockerAdditionInterface.cs</DependentUpon>
+        <Compile Include="gui\LockerInterface.Designer.cs">
+          <DependentUpon>LockerInterface.cs</DependentUpon>
         </Compile>
         <Compile Include="gui\Mainframe.cs">
           <SubType>Form</SubType>
@@ -86,8 +86,8 @@
         <EmbeddedResource Include="gui\EntryViewingDialog.resx">
           <DependentUpon>EntryViewingDialog.cs</DependentUpon>
         </EmbeddedResource>
-        <EmbeddedResource Include="gui\LockerAdditionInterface.resx">
-          <DependentUpon>LockerAdditionInterface.cs</DependentUpon>
+        <EmbeddedResource Include="gui\LockerInterface.resx">
+          <DependentUpon>LockerInterface.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="gui\Mainframe.resx">
           <DependentUpon>Mainframe.cs</DependentUpon>

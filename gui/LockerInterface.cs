@@ -17,9 +17,9 @@ using Microsoft.SqlServer.Management.Sdk.Sfc;
 namespace GetosDirtLocker.gui
 {
     /// <summary>
-    /// The main interface for adding new dirt into the locker. Also displays the last few entries.
+    /// The main interface for the display of dirt into the locker.
     /// </summary>
-    public partial class LockerAdditionInterface : Form
+    public partial class LockerInterface : Form
     {
         
         /// <summary>
@@ -46,7 +46,7 @@ namespace GetosDirtLocker.gui
         /// Main constructor of the class
         /// </summary>
         /// <param name="manager">The database manager used to access and interact with the db</param>
-        public LockerAdditionInterface(SQLDatabaseManager manager)
+        public LockerInterface(SQLDatabaseManager manager)
         {
             InitializeComponent();
             PictureBoxPermanentLoading.Image = Resources.loader;
@@ -70,16 +70,18 @@ namespace GetosDirtLocker.gui
         private List<string[]> GetFilteredEntries()
         {
             string indexationFilter = !TextBoxIndexLookup.Text.Equals(string.Empty) ? $"indexation_id LIKE '%{TextBoxIndexLookup.Text}%'" : "";
+            string usernameFilter = !TextBoxUsernameLookup.Text.Equals(string.Empty) ? $"username LIKE '%{TextBoxUsernameLookup.Text}%'" : "";
             string userUUIDFilter = !TextBoxUserUUIDLookup.Text.Equals(string.Empty) ? $"user_id LIKE '%{TextBoxUserUUIDLookup.Text}%'" : "";
             string notesFilter = !TextBoxNotesLookup.Text.Equals(string.Empty) ? $"notes LIKE '%{TextBoxNotesLookup.Text}%'" : "";
             string finalFilter = string.Empty;
             
             // If all the filters are empty, return all the entries
-            if (indexationFilter == "" && userUUIDFilter == "" && notesFilter == "")
+            if (indexationFilter == "" && userUUIDFilter == "" && notesFilter == "" && usernameFilter == "")
                 return this.Database.Select("Dirt");
             
             // Puts the filters together in a string ignoring any empty ones
             if (indexationFilter != "") finalFilter += indexationFilter;
+            if (usernameFilter != "") finalFilter += finalFilter == "" ? usernameFilter : $" AND {usernameFilter}";
             if (userUUIDFilter != "") finalFilter += finalFilter == "" ? userUUIDFilter : $" AND {userUUIDFilter}";
             if (notesFilter != "") finalFilter += finalFilter == "" ? notesFilter : $" AND {notesFilter}";
             
@@ -295,6 +297,7 @@ namespace GetosDirtLocker.gui
         /// </summary>
         private async void GridDirt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex <= -1) return;
             if (e.ColumnIndex == 4) await this.HandleImageToClipboard(e.RowIndex);
             if (e.ColumnIndex != 3) return;
 

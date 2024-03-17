@@ -4,7 +4,7 @@ namespace GetosDirtLocker.gui
 
 
 {
-    partial class LockerAdditionInterface
+    partial class LockerInterface
     {
         /// <summary>
         /// Required designer variable.
@@ -39,6 +39,7 @@ namespace GetosDirtLocker.gui
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Frame = new System.Windows.Forms.Panel();
+            this.TextBoxUsernameLookup = new GetosDirtLocker.controls.BetterTextBox();
             this.LabelEntriesDisplay = new System.Windows.Forms.Label();
             this.PictureBoxPermanentLoading = new System.Windows.Forms.PictureBox();
             this.ButtonApplyFilters = new System.Windows.Forms.Button();
@@ -75,6 +76,7 @@ namespace GetosDirtLocker.gui
             // 
             // Frame
             // 
+            this.Frame.Controls.Add(this.TextBoxUsernameLookup);
             this.Frame.Controls.Add(this.LabelEntriesDisplay);
             this.Frame.Controls.Add(this.PictureBoxPermanentLoading);
             this.Frame.Controls.Add(this.ButtonApplyFilters);
@@ -100,6 +102,15 @@ namespace GetosDirtLocker.gui
             this.Frame.Name = "Frame";
             this.Frame.Size = new System.Drawing.Size(734, 607);
             this.Frame.TabIndex = 0;
+            // 
+            // TextBoxUsernameLookup
+            // 
+            this.TextBoxUsernameLookup.Location = new System.Drawing.Point(191, 111);
+            this.TextBoxUsernameLookup.Name = "TextBoxUsernameLookup";
+            this.TextBoxUsernameLookup.PlaceholderText = "Username";
+            this.TextBoxUsernameLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
+            this.TextBoxUsernameLookup.Size = new System.Drawing.Size(173, 20);
+            this.TextBoxUsernameLookup.TabIndex = 23;
             // 
             // LabelEntriesDisplay
             // 
@@ -183,29 +194,29 @@ namespace GetosDirtLocker.gui
             // 
             // TextBoxNotesLookup
             // 
-            this.TextBoxNotesLookup.Location = new System.Drawing.Point(487, 111);
+            this.TextBoxNotesLookup.Location = new System.Drawing.Point(547, 111);
             this.TextBoxNotesLookup.Name = "TextBoxNotesLookup";
-            this.TextBoxNotesLookup.PlaceholderText = "Additional Notes";
+            this.TextBoxNotesLookup.PlaceholderText = "Additional Information";
             this.TextBoxNotesLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
-            this.TextBoxNotesLookup.Size = new System.Drawing.Size(234, 20);
+            this.TextBoxNotesLookup.Size = new System.Drawing.Size(173, 20);
             this.TextBoxNotesLookup.TabIndex = 14;
             // 
             // TextBoxUserUUIDLookup
             // 
-            this.TextBoxUserUUIDLookup.Location = new System.Drawing.Point(247, 111);
+            this.TextBoxUserUUIDLookup.Location = new System.Drawing.Point(368, 111);
             this.TextBoxUserUUIDLookup.Name = "TextBoxUserUUIDLookup";
             this.TextBoxUserUUIDLookup.PlaceholderText = "User UUID";
             this.TextBoxUserUUIDLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
-            this.TextBoxUserUUIDLookup.Size = new System.Drawing.Size(234, 20);
+            this.TextBoxUserUUIDLookup.Size = new System.Drawing.Size(173, 20);
             this.TextBoxUserUUIDLookup.TabIndex = 13;
             // 
             // TextBoxIndexLookup
             // 
-            this.TextBoxIndexLookup.Location = new System.Drawing.Point(10, 111);
+            this.TextBoxIndexLookup.Location = new System.Drawing.Point(12, 111);
             this.TextBoxIndexLookup.Name = "TextBoxIndexLookup";
             this.TextBoxIndexLookup.PlaceholderText = "Indexation ID";
             this.TextBoxIndexLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
-            this.TextBoxIndexLookup.Size = new System.Drawing.Size(231, 20);
+            this.TextBoxIndexLookup.Size = new System.Drawing.Size(173, 20);
             this.TextBoxIndexLookup.TabIndex = 12;
             // 
             // mionjnl
@@ -395,7 +406,7 @@ namespace GetosDirtLocker.gui
             // 
             this.GeneralErrorProvider.ContainerControl = this;
             // 
-            // LockerAdditionInterface
+            // LockerInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -404,7 +415,7 @@ namespace GetosDirtLocker.gui
             this.Controls.Add(this.Frame);
             this.Controls.Add(this.miniToolStrip);
             this.Location = new System.Drawing.Point(15, 15);
-            this.Name = "LockerAdditionInterface";
+            this.Name = "LockerInterface";
             this.Text = "Geto\'s Locker 2: Electric Boogaloo";
             this.Frame.ResumeLayout(false);
             this.Frame.PerformLayout();
@@ -414,6 +425,8 @@ namespace GetosDirtLocker.gui
             ((System.ComponentModel.ISupportInitialize)(this.GeneralErrorProvider)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private GetosDirtLocker.controls.BetterTextBox TextBoxUsernameLookup;
 
         private System.Windows.Forms.Label LabelEntriesDisplay;
 

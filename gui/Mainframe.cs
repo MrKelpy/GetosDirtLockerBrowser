@@ -50,7 +50,7 @@ namespace GetosDirtLocker.gui
         /// <summary>
         /// The locker addition interface used to add new dirt into the locker.
         /// </summary>
-        public static LockerAdditionInterface LockerAddition { get; set; }
+        public static LockerInterface LockerAddition { get; set; }
         
         /// <summary>
         /// The stored token, used to check if the token has changed.
@@ -69,7 +69,7 @@ namespace GetosDirtLocker.gui
             
             // Sets the three interfaces into the properties defined above.
             TokenInterface = new TokenConfigurationInterface();
-            LockerAddition = new LockerAdditionInterface(databaseManager);
+            LockerAddition = new LockerInterface(databaseManager);
             
             // Set the token configuration interface as the default interface.
             MainLayout.SetAllFrom(TokenInterface.GetLayout());
