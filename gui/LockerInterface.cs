@@ -11,8 +11,6 @@ using GetosDirtLocker.requests;
 using GetosDirtLocker.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
-using LaminariaCore_General.utils;
-using Microsoft.SqlServer.Management.Sdk.Sfc;
 
 namespace GetosDirtLocker.gui
 {

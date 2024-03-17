@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using GetosDirtLocker.Properties;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 using LaminariaCore_General.utils;
@@ -114,14 +115,14 @@ public class DirtStorageManager
         List<string[]> results = this.Database.Select("Attachment", $"attachment_id = '{id}'");
         if (results.Count == 0) return null;
         
-        if (!await UrlIsDownloadablePicture(results[0][2])) return ConfigurationManager.AppSettings.Get("undownloadable-dirt");
+        if (!await UrlIsDownloadablePicture(results[0][2])) return null;
         
         // If the picture is downloadable, download it and add it to the database.
         // At this point, the picture doesn't exist in the storage or database, so we can download it.
         string downloadedFilepath = await this.DownloadDirtPicture(results[0][2], id) ? this.GetDirtPicturePath(id) : null;
         
         // Can never be too sure. Check for null.
-        if (downloadedFilepath is null) return ConfigurationManager.AppSettings.Get("undownloadable-dirt");
+        if (downloadedFilepath is null) return null;
         
         // Add the picture to the database.
         await DatabaseImageAccessor.AddDirtImageToDatabase(id, downloadedFilepath);
