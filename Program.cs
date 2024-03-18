@@ -23,11 +23,15 @@ namespace GetosDirtLockerBrowser
         /// </summary>
         public static string[] DefaultCredentials { get; set; }
 
-
         /// <summary>
         /// The default host to use when connecting to the database, loaded from the configuration file.
         /// </summary>
         public static string DefaultHost { get; set; }
+        
+        /// <summary>
+        /// The hashed default host to use when indexing pictures with the host, hiding the ip address.
+        /// </summary>
+        public static string DefaultHostHashed { get; set; }
 
         /// <summary>
         /// The main entry point for the application.
@@ -47,6 +51,8 @@ namespace GetosDirtLockerBrowser
             DefaultHost = databaseHostFile.Length <= 0
                 ? @".\SQLEXPRESS"
                 : $@"{databaseHostFile[0]},{databaseHostFile[1]}";
+            
+            DefaultHostHashed = DefaultHost.GetHashCode().ToString();
 
             try
             {
