@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using GetosDirtLockerBrowser.gui;
@@ -52,7 +53,7 @@ namespace GetosDirtLockerBrowser
                 DefaultCredentials = new string[2];
 
                 // If the host is not the default one, manually specify the connection string to use TCP/IP.
-                if (!DefaultCredentials.Equals(@".\SQLEXPRESS"))
+                if (!DefaultHost.Equals(@".\SQLEXPRESS"))
                 {
                     DefaultCredentials[0] = databaseHostFile[2];
                     DefaultCredentials[1] = databaseHostFile[3];
@@ -89,7 +90,7 @@ namespace GetosDirtLockerBrowser
         {
 
             // If the credentials are present, use an sql authentication
-            if (credentials.Length > 0)
+            if (credentials.Any(x => x != null))
             {
                 SQLServerConnector connector = new SQLServerConnector(host, "DirtLocker", credentials[0], credentials[1]);
                 return new SQLDatabaseManager(connector);

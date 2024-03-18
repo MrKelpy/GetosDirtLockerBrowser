@@ -27,8 +27,8 @@ DisableProgramGroupPage=yes
 LicenseFile=C:\dev\C#\GetosLockerIndexer\GetosDirtLockerBrowser\LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=GetosDirtLockerBrowser
+PrivilegesRequiredOverridesAllowed=commandline
+OutputBaseFilename=GetosDirtLockerBrowser-Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
