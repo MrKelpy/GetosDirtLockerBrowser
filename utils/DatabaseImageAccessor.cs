@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
-using System.Threading.Tasks;
 using LaminariaCore_Databases.sqlserver;
 
-namespace GetosDirtLocker.utils;
+namespace GetosDirtLockerBrowser.utils;
 
 /// <summary>
 /// This class is responsible for handling the two image tables in the database,
@@ -24,77 +21,6 @@ public class DatabaseImageAccessor
     /// </summary>
     /// <param name="manager">The database manager used throughout the program</param>
     public DatabaseImageAccessor(SQLDatabaseManager manager) => this.Database = manager;
-    
-    /// <summary>
-    /// Adds an image to the database based on a specified table name, ID and path. This method
-    /// takes care of BINARY data, not URLs.
-    /// </summary>
-    /// <param name="id">The ID of the image to add</param>
-    /// <param name="path">The path to the image to add</param>
-    /// <param name="table">The table to add the image to</param>
-    private Task AddImageToDatabase(string id, string path, string table)
-    {
-        try
-        {
-            // Read the specified file data and create the command in a new connection.
-            byte[] data = File.ReadAllBytes(path);
-            SQLDatabaseManager manager = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
-            manager.UseDatabase("DirtLocker");
-            
-            using SqlCommand command = new($"INSERT INTO {table} VALUES (@id, @data)", manager.Connector.Connection);
-
-            // Add the parameters to the command template.
-            command.Parameters.AddWithValue("@id", id);
-            command.Parameters.AddWithValue("@data", data);
-
-            // Execute the command and return the result.
-            command.ExecuteNonQuery();
-
-        }
-        // If an exception occurs, ignore.
-        catch (Exception e) { return Task.CompletedTask; }
-
-        return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Updates an image in the database based on a specified table name, ID and path. This method
-    /// takes care of BINARY data, not URLs.
-    /// </summary>
-    /// <param name="id">The ID of the image to be update</param>
-    /// <param name="path">The path to the image to update the table with</param>
-    /// <param name="table">The table to update the image with</param>
-    private Task UpdateImageInDatabase(string id, string path, string table)
-    {
-        try
-        {
-            // Read the specified file data and create the command in a new connection.
-            byte[] data = File.ReadAllBytes(path);
-            SQLDatabaseManager manager = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
-            manager.UseDatabase("DirtLocker");
-
-            // If the image does not exist, add it to the database instead.
-            if (!ImageExists(id, table))
-            {
-                this.AddImageToDatabase(id, path, table);
-                return Task.CompletedTask;
-            }
-            
-            using SqlCommand command = new($"UPDATE {table} SET content = @data WHERE content_id = @id", manager.Connector.Connection);
-
-            // Add the parameters to the command template.
-            command.Parameters.AddWithValue("@id", id);
-            command.Parameters.AddWithValue("@data", data);
-
-            // Execute the command and return the result.
-            command.ExecuteNonQuery();
-
-        }
-        // If an exception occurs, ignore.
-        catch (Exception e) { return Task.CompletedTask; }
-
-        return Task.CompletedTask;
-    }
     
     /// <summary>
     /// Checks if an image exists in the database based on a specified table name and ID.
@@ -149,36 +75,6 @@ public class DatabaseImageAccessor
     /// <param name="id">The ID to check for in the database</param>
     /// <returns>Whether or not the image exists</returns>
     public bool AvatarImageExists(string id) => this.ImageExists(id, "AvatarStorage");
-    
-    /// <summary>
-    /// Shortcut method to add a dirt image to the database.
-    /// </summary>
-    /// <param name="id">The ID to check for in the database</param>
-    /// <param name="path">The path of the image to add</param>
-    /// <returns>Whether or not the addition of the image was successful</returns>
-    public async Task AddDirtImageToDatabase(string id, string path) => await this.AddImageToDatabase(id, path, "AttachmentStorage");
-    
-    /// <summary>
-    /// Shortcut method to add an avatar image to the database.
-    /// </summary>
-    /// <param name="id">The ID to check for in the database</param>
-    /// <param name="path">The path of the image to add</param>
-    /// <returns>Whether or not the addition of the image was successful</returns>
-    public async Task AddAvatarImageToDatabase(string id, string path) => await this.AddImageToDatabase(id, path, "AvatarStorage");
-    
-    /// <summary>
-    /// Updates a dirt image in the database.
-    /// </summary>
-    /// <param name="id">The ID to check for in the database</param>
-    /// <param name="path">The path of the image to update with</param>
-    public async Task UpdateDirtImageInDatabase(string id, string path) => await this.UpdateImageInDatabase(id, path, "AttachmentStorage");
-    
-    /// <summary>
-    /// Updates an avatar image in the database.
-    /// </summary>
-    /// <param name="id">The ID to check for in the database</param>
-    /// <param name="path">The path of the image to update with</param>
-    public async Task UpdateAvatarImageInDatabase(string id, string path) => await this.UpdateImageInDatabase(id, path, "AvatarStorage");
     
     /// <summary>
     /// Shortcut method to get a dirt image from the database.

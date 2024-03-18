@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GetosDirtLocker.Properties;
-using GetosDirtLocker.requests;
-using GetosDirtLocker.utils;
+using GetosDirtLockerBrowser.Properties;
+using GetosDirtLockerBrowser.requests;
+using GetosDirtLockerBrowser.utils;
 using LaminariaCore_Databases.sqlserver;
-using LaminariaCore_General.common;
 
-namespace GetosDirtLocker.gui
+namespace GetosDirtLockerBrowser.gui
 {
     /// <summary>
     /// The main interface for the display of dirt into the locker.
@@ -47,7 +43,6 @@ namespace GetosDirtLocker.gui
         public LockerInterface(SQLDatabaseManager manager)
         {
             InitializeComponent();
-            PictureBoxPermanentLoading.Image = Resources.loader;
             this.Database = manager;
             this.DirtManager = new DirtStorageManager(Database);
             this.ImageAccessor = new DatabaseImageAccessor(Database);
@@ -98,6 +93,7 @@ namespace GetosDirtLocker.gui
             
             // Get all the dirt entries existent in the database and initialise an array for the rows
             Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = false;
+            this.PictureLoading.Visible = true;
             List<string[]> dirtEntries = GetFilteredEntries();
 
             dirtEntries.Reverse();
@@ -115,11 +111,14 @@ namespace GetosDirtLocker.gui
 
             // Awaits all the tasks and adds the rows to the DataGridView
             DataGridViewRow[] rows = await Task.WhenAll(taskList);
+
+            // Adds the rows to the DataGridView and updates the label
             GridDirt.Rows.AddRange(rows);
             
             string entriesText = dirtEntries.Count == 1 ? "entry" : "entries";
             LabelEntriesDisplay.Text = $@"Now displaying {dirtEntries.Count} {entriesText}";
             Mainframe.Instance.reloadEntriesToolStripMenuItem.Available = true;
+            this.PictureLoading.Visible = false;
         }
 
         /// <summary>
@@ -172,99 +171,7 @@ namespace GetosDirtLocker.gui
                 return rowTemplate;
             });
         }
-
-        /// <summary>
-        /// Adds a new dirt entry to the locker based on the provided data.
-        /// </summary>
-        private async void buttonAdd_Click(object sender, EventArgs e)
-        {
-            this.SetAdditionInLoadingState(true);
-            GeneralErrorProvider.Clear();
- 
-            if (!ulong.TryParse(TextBoxUserUUID.Text, out ulong _))
-            {
-                GeneralErrorProvider.SetError(TextBoxUserUUID, "Wrongly formatted UUID (Numbers only!)");
-                this.SetAdditionInLoadingState(false);
-                return;
-            }
-            
-            DiscordUser user = new DiscordUser(TextBoxUserUUID.Text);
-            
-            // Checks if the user UUID is empty.
-            if (!await user.CheckAccountExistence())
-            {
-                GeneralErrorProvider.SetError(TextBoxUserUUID, "This user does not exist.");
-                this.SetAdditionInLoadingState(false);
-                return;
-            }
-
-            // Checks if the URL is a valid url
-            if (!await DirtStorageManager.UrlIsDownloadablePicture(TextBoxAttachmentURL.Text))
-            {
-                GeneralErrorProvider.SetError(TextBoxAttachmentURL, "Invalid URL");
-                this.SetAdditionInLoadingState(false);
-                return;
-            }
-            
-            // Checks if the same attachment URL is already in the database
-            if (this.Database.Select("Attachment", $"attachment_url = '{TextBoxAttachmentURL.Text}'").Count > 0)
-            {
-                GeneralErrorProvider.SetError(TextBoxAttachmentURL, "This attachment is already registered.");
-                this.SetAdditionInLoadingState(false);
-                return;
-            }
-            
-            user.AddToDatabase(this.Database);  // Adds the user to the database if they don't exist.
-            
-            string indexationID = user.GetNextIndexationID(this.Database);
-            string username = user.TryGetAdocordUsername() == "" ? (await user.GetUserFromID()).Username : "Unknown";
-            
-            // Gets the file type and size of the attachment
-            using WebResponse response = await WebRequest.Create(TextBoxAttachmentURL.Text).GetResponseAsync();
-            string fileType = response.ContentType;
-            long fileSize = response.ContentLength;
-            
-            // Inserts the attachment into the database and then the dirt entry.
-            this.Database.InsertInto("Attachment", fileType, TextBoxAttachmentURL.Text, fileSize);
-            string attachmentID = this.Database.Select(["attachment_id"], "Attachment", $"attachment_url = '{TextBoxAttachmentURL.Text}'")[0][0];
-            
-            this.Database.InsertInto("Dirt", indexationID, user.Uuid.ToString(), int.Parse(attachmentID), username, TextBoxAdditionalNotes.Text);
-            user.IncrementTotalDirtCount(this.Database);
-            
-            // Builds the information string
-            string informationString = user.GetInformationString(this.Database, indexationID);
-            
-            // Inserts the dirt entry into the DataGridView
-            string dirtPath = await DirtManager.GetDirtPicture(attachmentID);
-
-            Image userAvatarCopy = FileUtilExtensions.GetImageFromFileStream(await user.DownloadUserAvatar(ImageAccessor));
-            Image dirtImageCopy = FileUtilExtensions.GetImageFromFileStream(dirtPath);
-            GridDirt.Rows.Insert(0, indexationID, user.Uuid, userAvatarCopy, informationString, dirtImageCopy);
-            
-            // Clears the textboxes and sets the addition button to a normal state
-            TextBoxUserUUID.Text = TextBoxAttachmentURL.Text = TextBoxAdditionalNotes.Text = "";
-            string entryText = GridDirt.Rows.Count == 1 ? "entry" : "entries";
-            LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} {entryText}";
-            this.SetAdditionInLoadingState(false);
-            
-            // Updates the database with the new profile picture
-            Section avatarSection = Program.FileManager.GetFirstSectionNamed("avatars");
-            await ImageAccessor.UpdateAvatarImageInDatabase(user.Uuid.ToString(), avatarSection.AddDocument(user.Uuid + ".png"));
-            await ImageAccessor.UpdateDirtImageInDatabase(attachmentID, dirtPath);
-        }
         
-        /// <summary>
-        /// Sets the addition button to a loading state or a normal state based on the provided boolean. This
-        /// is purely visual and serves to prevent the user from trying to add multiple entries at the same time
-        /// and to be a progress indicator.
-        /// </summary>
-        /// <param name="state">The loading state specified</param>
-        private void SetAdditionInLoadingState(bool state)
-        {
-            PictureBoxPermanentLoading.Visible = state;
-            buttonAdd.Visible = !state;
-        }
-
         /// <summary>
         /// Keeps clearing the selection on the DataGridView so that it never displays a blue selected colour on it.
         /// After that, change the foreground colour of the cell to a slightly darker one, and set the previously
@@ -378,46 +285,6 @@ namespace GetosDirtLocker.gui
             // Opens the viewing dialog
             EntryViewingDialog viewingDialog = new EntryViewingDialog(user, entry, this.DirtManager, this.ImageAccessor);
             viewingDialog.Show();
-        }
-
-        /// <summary>
-        /// Deletes the selected entry from the database and the DataGridView
-        /// </summary>
-        private void ButtonDeleteEntry_Click(object sender, EventArgs e)
-        {
-            if (this.SelectedRow == null) return;
-            if (MessageBox.Show(@"Are you sure you want to delete this entry?", @"Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-            
-            string indexationId = this.SelectedRow.Cells[0].Value.ToString();
-            string attachmentId = this.Database.Select(["attachment_id"], "Dirt", $"indexation_id = '{indexationId}'")[0][0];
-            
-            // Deletes the entry from the database
-            this.Database.DeleteFrom("AttachmentStorage", $"content_id = '{attachmentId}'");
-            this.Database.DeleteFrom("Attachment", $"attachment_id = '{attachmentId}'");
-            this.Database.DeleteFrom("Dirt", $"indexation_id = '{indexationId}'");
-            
-            // Deletes the file from the disk if it exists
-            try { File.Delete(DirtManager.GetDirtPicturePath(attachmentId));
-            } catch (IOException) { }
-            
-            // Checks if this was the last entry of the user and deletes the user from the system if it was
-            string userId = this.SelectedRow.Cells[1].Value.ToString();
-            new DiscordUser(userId).DecrementTotalDirtCount(Database);  // Decrements the total dirt count of the user
-
-            if (this.Database.Select("Dirt", $"user_id = '{userId}'").Count == 0)
-            {
-                this.Database.DeleteFrom("AvatarStorage", $"content_id = '{userId}'");
-                this.Database.DeleteFrom("DiscordUser", $"user_id = '{userId}'");
-            }
-
-            Section avatarSection = Program.FileManager.GetFirstSectionNamed("avatars");
-            string filepath = avatarSection.GetFirstDocumentNamed($@"{userId}.png");
-            if (filepath != null) File.Delete(filepath);
-
-            // Removes the entry from the DataGridView and decrements the entry count
-            GridDirt.Rows.Remove(this.SelectedRow);
-            LabelEntriesDisplay.Text = $@"Now displaying {GridDirt.Rows.Count} entries";
-            this.SelectedRow = null;
         }
         
         /// <summary>

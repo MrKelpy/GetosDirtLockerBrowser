@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GetosDirtLocker.controls
+namespace GetosDirtLockerBrowser.controls
 {
     /// <summary>
     /// Represents a Windows text box control with placeholder.

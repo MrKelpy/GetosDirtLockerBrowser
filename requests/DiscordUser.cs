@@ -1,14 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-using GetosDirtLocker.utils;
+using GetosDirtLockerBrowser.utils;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
 
-namespace GetosDirtLocker.requests;
+namespace GetosDirtLockerBrowser.requests;
 
 /// <summary>
 /// This class represents a discord user and implements many useful methods to access the discord API and retrieve
@@ -30,23 +27,7 @@ public class DiscordUser
         if (uuid.Length > 0)
             this.Uuid = ulong.Parse(uuid);
     }
-
-    /// <summary>
-    /// Gets the user object by their discord ID
-    /// </summary>
-    /// <returns>An IUser object containing the user ID, or null if it doesn't exist</returns>
-    public async Task<IUser> GetUserFromID()
-    {
-        if (this.Uuid == default) return null;
-        return await DiscordInteractions.Client.GetUserAsync(this.Uuid);
-    }
-
-    /// <summary>
-    /// Checks if the account exists and is valid.
-    /// </summary>
-    /// <returns>Whether or not the account exists</returns>
-    public async Task<bool> CheckAccountExistence() => await this.GetUserFromID() != null;
-
+    
     /// <summary>
     /// Gets the information string to be displayed in the locker.
     /// </summary>
@@ -110,103 +91,7 @@ public class DiscordUser
             await fileStream.WriteAsync(image, 0, image.Length);
             return expectedPath;
         }
-        
-        return await this.DownloadUserAvatar(accessor);
-    }
-    
-    /// <summary>
-    /// Downloads the user's avatar and returns the path to the file.
-    /// </summary>
-    /// <param name="accessor">The Database Image Accessor used to get, add and manage the images on the database storage tables</param>
-    /// <returns>The path to the just-downloaded file</returns>
-    public async Task<string> DownloadUserAvatar(DatabaseImageAccessor accessor)
-    {
-        Section avatarsSection = Program.FileManager.AddSection("avatars");
-        IUser user = await this.GetUserFromID();
-        
-        // Create the file path and download the avatar.
-        string filepath = avatarsSection.SectionFullPath + $"/{this.Uuid}.png";
-        string avatarUrl = user.GetAvatarUrl() ?? $"https://cdn.discordapp.com/embed/avatars/{new Random().Next(0, 5)}.png";
-        
-        using WebResponse response = await WebRequest.Create(avatarUrl).GetResponseAsync();
-        
-        // Copy the response stream to the file stream.
-        using Stream responseStream = response.GetResponseStream();
-        if (responseStream == null) return null;
 
-        // Try to copy the stream to the file, and if it fails, return null.
-        try
-        {
-            using FileStream fileStream = new (filepath, FileMode.Create);
-            await responseStream.CopyToAsync(fileStream);
-        }
-        catch (IOException e) { return null; }
-        catch (TimeoutException e) { return null; }
-
-        await accessor.AddAvatarImageToDatabase(this.Uuid.ToString(), filepath);
-        return filepath;
-    }
-
-    /// <summary>
-    /// Tries to get the user's nickname in the Adocord server. If the bot isn't in the server, it returns null.
-    /// </summary>
-    /// <returns>The username of the user or an empty string if it can't get it</returns>
-    public string TryGetAdocordUsername()
-    {
-        SocketGuild adocord = DiscordInteractions.Client.GetGuild(865372252433940500);
-        if (adocord == null) return string.Empty;
-        
-        IGuildUser user = adocord.GetUser(this.Uuid);
-        return user?.Nickname ?? user?.Username;
-    }
-    
-    /// <summary>
-    /// Gets the next indexation ID for the user.
-    /// </summary>
-    /// <param name="database">The database manager to get the user information from</param>
-    /// <returns>The indexation ID formatted as #USER-COUNT.TOTAL-COUNT.DDMMYY</returns>
-    public string GetNextIndexationID(SQLDatabaseManager database)
-    {
-        string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
-        userDirtCount = (int.Parse(userDirtCount) + 1).ToString();
-        
-        string totalDirtCount = (database.Select("Dirt").Count + 1).ToString();
-        string formattedDate = DateTime.Now.ToString("ddMMyy");
-        
-        // Add trailing zeroes to the counts
-        userDirtCount = userDirtCount.Length <= 1 ? $"0{userDirtCount}" : userDirtCount;
-        totalDirtCount = totalDirtCount.Length <= 1 ? $"0{totalDirtCount}" : totalDirtCount;
-        
-        return $"#{userDirtCount}.{totalDirtCount}.{formattedDate}";
-    }
-    
-    /// <summary>
-    /// Adds the user to the database if it doesn't exist.
-    /// </summary>
-    /// <param name="database">The database manager to add the user with</param>
-    public void AddToDatabase(SQLDatabaseManager database)
-    {
-        if (database.Select("DiscordUser", $"user_id = '{this.Uuid}'").Count > 0) return;
-        database.InsertInto("DiscordUser", this.Uuid.ToString(), "0");
-    }
-
-    /// <summary>
-    /// Increments the total dirt count of the user in the database.
-    /// </summary>
-    /// <param name="database">The database manager to add the user with</param>
-    public void IncrementTotalDirtCount(SQLDatabaseManager database)
-    {
-        string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
-        database.Update("DiscordUser", $"user_total", int.Parse(userDirtCount)+1, $"user_id = '{this.Uuid}'");
-    }
-    
-    /// <summary>
-    /// <param name="database">The database manager to add the user with</param>
-    /// </summary>
-    /// <param name="database"></param>
-    public void DecrementTotalDirtCount(SQLDatabaseManager database)
-    {
-        string userDirtCount = database.Select(new [] {"user_total"}, "DiscordUser", $"user_id = '{this.Uuid}'")[0][0];
-        database.Update("DiscordUser", $"user_total", int.Parse(userDirtCount)-1, $"user_id = '{this.Uuid}'");
+        return null;
     }
 }

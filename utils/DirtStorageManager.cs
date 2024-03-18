@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using GetosDirtLocker.Properties;
 using LaminariaCore_Databases.sqlserver;
 using LaminariaCore_General.common;
-using LaminariaCore_General.utils;
 
-namespace GetosDirtLocker.utils;
+namespace GetosDirtLockerBrowser.utils;
 
 /// <summary>
 /// This class is responsible for managing the dirt picture storage and downloads, aswell as caching.
@@ -123,9 +120,6 @@ public class DirtStorageManager
         
         // Can never be too sure. Check for null.
         if (downloadedFilepath is null) return null;
-        
-        // Add the picture to the database.
-        await DatabaseImageAccessor.AddDirtImageToDatabase(id, downloadedFilepath);
         return downloadedFilepath;
     }
     

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using GetosDirtLocker.requests;
-using GetosDirtLocker.utils;
-using LaminariaCore_Databases.sqlserver;
+using GetosDirtLockerBrowser.requests;
+using GetosDirtLockerBrowser.utils;
 
-namespace GetosDirtLocker.gui;
+namespace GetosDirtLockerBrowser.gui;
 
 /// <summary>
 /// This form is used to display the contents of a single entry in the database.

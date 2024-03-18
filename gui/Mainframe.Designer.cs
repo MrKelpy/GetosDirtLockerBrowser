@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 
-namespace GetosDirtLocker.gui
+namespace GetosDirtLockerBrowser.gui
 {
     partial class Mainframe
     {
@@ -34,8 +33,6 @@ namespace GetosDirtLocker.gui
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mainframe));
             this.MenuBarPages = new System.Windows.Forms.MenuStrip();
-            this.ToolStripNewEntry = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripTokenConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainLayout = new System.Windows.Forms.Panel();
             this.MenuBarPages.SuspendLayout();
@@ -43,29 +40,14 @@ namespace GetosDirtLocker.gui
             // 
             // MenuBarPages
             // 
-            this.MenuBarPages.BackColor = System.Drawing.Color.Tomato;
+            this.MenuBarPages.BackColor = System.Drawing.Color.CornflowerBlue;
             this.MenuBarPages.ForeColor = System.Drawing.Color.White;
-            this.MenuBarPages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.ToolStripNewEntry, this.ToolStripTokenConfig, this.reloadEntriesToolStripMenuItem });
+            this.MenuBarPages.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.reloadEntriesToolStripMenuItem });
             this.MenuBarPages.Location = new System.Drawing.Point(0, 0);
             this.MenuBarPages.Name = "MenuBarPages";
             this.MenuBarPages.Size = new System.Drawing.Size(734, 24);
             this.MenuBarPages.TabIndex = 2;
             this.MenuBarPages.Text = "menuStrip1";
-            // 
-            // ToolStripNewEntry
-            // 
-            this.ToolStripNewEntry.Name = "ToolStripNewEntry";
-            this.ToolStripNewEntry.Size = new System.Drawing.Size(54, 20);
-            this.ToolStripNewEntry.Text = "Entries";
-            this.ToolStripNewEntry.Click += new System.EventHandler(this.ToolStripNewEntry_Click);
-            // 
-            // ToolStripTokenConfig
-            // 
-            this.ToolStripTokenConfig.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.ToolStripTokenConfig.Name = "ToolStripTokenConfig";
-            this.ToolStripTokenConfig.Size = new System.Drawing.Size(127, 20);
-            this.ToolStripTokenConfig.Text = "Token Configuration";
-            this.ToolStripTokenConfig.Click += new System.EventHandler(this.ToolStripTokenConfig_Click);
             // 
             // reloadEntriesToolStripMenuItem
             // 
@@ -109,9 +91,6 @@ namespace GetosDirtLocker.gui
 
         private System.Windows.Forms.Panel Frame;
 
-        private System.Windows.Forms.ToolStripMenuItem ToolStripTokenConfig;
-
-        private System.Windows.Forms.ToolStripMenuItem ToolStripNewEntry;
         private System.Windows.Forms.MenuStrip MenuBarPages;
 
         #endregion

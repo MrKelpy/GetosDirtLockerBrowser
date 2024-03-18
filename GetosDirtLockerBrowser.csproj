@@ -6,8 +6,8 @@
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
         <ProjectGuid>{33420953-A273-47B8-B10C-6AFA637F4599}</ProjectGuid>
         <OutputType>WinExe</OutputType>
-        <RootNamespace>GetosDirtLocker</RootNamespace>
-        <AssemblyName>GetosDirtLocker</AssemblyName>
+        <RootNamespace>GetosDirtLockerBrowser</RootNamespace>
+        <AssemblyName>GetosDirtLockerBrowser</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,8 +35,8 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="GetosDirtLocker">
-          <HintPath>bin\Debug\GetosDirtLocker.exe</HintPath>
+        <Reference Include="GetosDirtLockerBrowser">
+          <HintPath>bin\Debug\GetosDirtLockerBrowser.exe</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -70,15 +70,8 @@
         <Compile Include="gui\Mainframe.Designer.cs">
           <DependentUpon>Mainframe.cs</DependentUpon>
         </Compile>
-        <Compile Include="gui\TokenConfigurationInterface.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="gui\TokenConfigurationInterface.Designer.cs">
-          <DependentUpon>TokenConfigurationInterface.cs</DependentUpon>
-        </Compile>
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="requests\DiscordInteractions.cs" />
         <Compile Include="requests\DiscordUser.cs" />
         <Compile Include="utils\DatabaseImageAccessor.cs" />
         <Compile Include="utils\DirtStorageManager.cs" />
@@ -91,9 +84,6 @@
         </EmbeddedResource>
         <EmbeddedResource Include="gui\Mainframe.resx">
           <DependentUpon>Mainframe.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="gui\TokenConfigurationInterface.resx">
-          <DependentUpon>TokenConfigurationInterface.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
@@ -129,15 +119,9 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="Resources\copied.png" />
-        <Content Include="Resources\geto.JPG" />
-        <Content Include="Resources\gojo.jpeg" />
         <Content Include="Resources\icon.ico" />
         <Content Include="Resources\loader.gif" />
-        <Content Include="Resources\megumi.jpg" />
         <Content Include="Resources\nuhuh.jpg" />
-        <Content Include="Resources\shoko.jpg" />
-        <Content Include="Resources\warning.png" />
-        <Content Include="Resources\yuji2.jpg" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

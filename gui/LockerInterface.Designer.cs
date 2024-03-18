@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using GetosDirtLockerBrowser.controls;
 
-namespace GetosDirtLocker.gui
+namespace GetosDirtLockerBrowser.gui
 
 
 {
@@ -39,17 +40,15 @@ namespace GetosDirtLocker.gui
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Frame = new System.Windows.Forms.Panel();
-            this.TextBoxUsernameLookup = new GetosDirtLocker.controls.BetterTextBox();
+            this.PictureLoading = new System.Windows.Forms.PictureBox();
             this.LabelEntriesDisplay = new System.Windows.Forms.Label();
-            this.PictureBoxPermanentLoading = new System.Windows.Forms.PictureBox();
+            this.TextBoxUsernameLookup = new GetosDirtLockerBrowser.controls.BetterTextBox();
             this.ButtonApplyFilters = new System.Windows.Forms.Button();
-            this.ButtonDeleteEntry = new System.Windows.Forms.Button();
             this.ButtonViewEntry = new System.Windows.Forms.Button();
-            this.lololool = new System.Windows.Forms.Label();
             this.okokkoko = new System.Windows.Forms.Label();
-            this.TextBoxNotesLookup = new GetosDirtLocker.controls.BetterTextBox();
-            this.TextBoxUserUUIDLookup = new GetosDirtLocker.controls.BetterTextBox();
-            this.TextBoxIndexLookup = new GetosDirtLocker.controls.BetterTextBox();
+            this.TextBoxNotesLookup = new GetosDirtLockerBrowser.controls.BetterTextBox();
+            this.TextBoxUserUUIDLookup = new GetosDirtLockerBrowser.controls.BetterTextBox();
+            this.TextBoxIndexLookup = new GetosDirtLockerBrowser.controls.BetterTextBox();
             this.mionjnl = new System.Windows.Forms.Label();
             this.GridDirt = new System.Windows.Forms.DataGridView();
             this.indexationid = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,44 +56,29 @@ namespace GetosDirtLocker.gui
             this.UserPicture = new System.Windows.Forms.DataGridViewImageColumn();
             this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DirtPreview = new System.Windows.Forms.DataGridViewImageColumn();
-            this.PictureLoading = new System.Windows.Forms.PictureBox();
-            this.TextBoxAdditionalNotes = new GetosDirtLocker.controls.BetterTextBox();
-            this.TextBoxAttachmentURL = new GetosDirtLocker.controls.BetterTextBox();
-            this.TextBoxUserUUID = new GetosDirtLocker.controls.BetterTextBox();
-            this.buttonAdd = new System.Windows.Forms.Button();
-            this.ljihgvfyc = new System.Windows.Forms.Label();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.GeneralErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.Frame.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxPermanentLoading)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.GridDirt)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureLoading)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GridDirt)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GeneralErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // Frame
             // 
-            this.Frame.Controls.Add(this.TextBoxUsernameLookup);
+            this.Frame.Controls.Add(this.PictureLoading);
             this.Frame.Controls.Add(this.LabelEntriesDisplay);
-            this.Frame.Controls.Add(this.PictureBoxPermanentLoading);
+            this.Frame.Controls.Add(this.TextBoxUsernameLookup);
             this.Frame.Controls.Add(this.ButtonApplyFilters);
-            this.Frame.Controls.Add(this.ButtonDeleteEntry);
             this.Frame.Controls.Add(this.ButtonViewEntry);
-            this.Frame.Controls.Add(this.lololool);
             this.Frame.Controls.Add(this.okokkoko);
             this.Frame.Controls.Add(this.TextBoxNotesLookup);
             this.Frame.Controls.Add(this.TextBoxUserUUIDLookup);
             this.Frame.Controls.Add(this.TextBoxIndexLookup);
             this.Frame.Controls.Add(this.mionjnl);
             this.Frame.Controls.Add(this.GridDirt);
-            this.Frame.Controls.Add(this.PictureLoading);
-            this.Frame.Controls.Add(this.TextBoxAdditionalNotes);
-            this.Frame.Controls.Add(this.TextBoxAttachmentURL);
-            this.Frame.Controls.Add(this.TextBoxUserUUID);
-            this.Frame.Controls.Add(this.buttonAdd);
-            this.Frame.Controls.Add(this.ljihgvfyc);
             this.Frame.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Frame.Location = new System.Drawing.Point(0, 0);
             this.Frame.MaximumSize = new System.Drawing.Size(734, 607);
@@ -103,98 +87,72 @@ namespace GetosDirtLocker.gui
             this.Frame.Size = new System.Drawing.Size(734, 607);
             this.Frame.TabIndex = 0;
             // 
+            // PictureLoading
+            // 
+            this.PictureLoading.Image = global::GetosDirtLockerBrowser.Properties.Resources.loader;
+            this.PictureLoading.Location = new System.Drawing.Point(346, 3);
+            this.PictureLoading.Name = "PictureLoading";
+            this.PictureLoading.Size = new System.Drawing.Size(45, 45);
+            this.PictureLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PictureLoading.TabIndex = 25;
+            this.PictureLoading.TabStop = false;
+            this.PictureLoading.Visible = false;
+            // 
+            // LabelEntriesDisplay
+            // 
+            this.LabelEntriesDisplay.Location = new System.Drawing.Point(369, 31);
+            this.LabelEntriesDisplay.Margin = new System.Windows.Forms.Padding(0);
+            this.LabelEntriesDisplay.Name = "LabelEntriesDisplay";
+            this.LabelEntriesDisplay.Size = new System.Drawing.Size(353, 20);
+            this.LabelEntriesDisplay.TabIndex = 24;
+            this.LabelEntriesDisplay.Text = "Now displaying 0 entries.";
+            this.LabelEntriesDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // TextBoxUsernameLookup
             // 
-            this.TextBoxUsernameLookup.Location = new System.Drawing.Point(191, 111);
+            this.TextBoxUsernameLookup.Location = new System.Drawing.Point(193, 51);
             this.TextBoxUsernameLookup.Name = "TextBoxUsernameLookup";
             this.TextBoxUsernameLookup.PlaceholderText = "Username";
             this.TextBoxUsernameLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
             this.TextBoxUsernameLookup.Size = new System.Drawing.Size(173, 20);
             this.TextBoxUsernameLookup.TabIndex = 23;
             // 
-            // LabelEntriesDisplay
-            // 
-            this.LabelEntriesDisplay.Location = new System.Drawing.Point(332, 9);
-            this.LabelEntriesDisplay.Margin = new System.Windows.Forms.Padding(0);
-            this.LabelEntriesDisplay.Name = "LabelEntriesDisplay";
-            this.LabelEntriesDisplay.Size = new System.Drawing.Size(388, 20);
-            this.LabelEntriesDisplay.TabIndex = 22;
-            this.LabelEntriesDisplay.Text = "Now displaying 0 entries.";
-            this.LabelEntriesDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // PictureBoxPermanentLoading
-            // 
-            this.PictureBoxPermanentLoading.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.PictureBoxPermanentLoading.Image = global::GetosDirtLocker.Properties.Resources.loader;
-            this.PictureBoxPermanentLoading.Location = new System.Drawing.Point(654, 32);
-            this.PictureBoxPermanentLoading.Name = "PictureBoxPermanentLoading";
-            this.PictureBoxPermanentLoading.Size = new System.Drawing.Size(46, 46);
-            this.PictureBoxPermanentLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PictureBoxPermanentLoading.TabIndex = 21;
-            this.PictureBoxPermanentLoading.TabStop = false;
-            this.PictureBoxPermanentLoading.Visible = false;
-            // 
             // ButtonApplyFilters
             // 
             this.ButtonApplyFilters.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ButtonApplyFilters.Location = new System.Drawing.Point(12, 138);
+            this.ButtonApplyFilters.Location = new System.Drawing.Point(14, 77);
             this.ButtonApplyFilters.Name = "ButtonApplyFilters";
-            this.ButtonApplyFilters.Size = new System.Drawing.Size(229, 36);
+            this.ButtonApplyFilters.Size = new System.Drawing.Size(352, 36);
             this.ButtonApplyFilters.TabIndex = 20;
             this.ButtonApplyFilters.Text = "Apply Filters";
             this.ButtonApplyFilters.UseVisualStyleBackColor = false;
             this.ButtonApplyFilters.Click += new System.EventHandler(this.ButtonApplyFilters_Click);
             // 
-            // ButtonDeleteEntry
-            // 
-            this.ButtonDeleteEntry.BackColor = System.Drawing.Color.IndianRed;
-            this.ButtonDeleteEntry.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.ButtonDeleteEntry.FlatAppearance.BorderSize = 0;
-            this.ButtonDeleteEntry.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.GeneralErrorProvider.SetIconAlignment(this.ButtonDeleteEntry, System.Windows.Forms.ErrorIconAlignment.BottomLeft);
-            this.ButtonDeleteEntry.Location = new System.Drawing.Point(484, 138);
-            this.ButtonDeleteEntry.Name = "ButtonDeleteEntry";
-            this.ButtonDeleteEntry.Size = new System.Drawing.Size(238, 36);
-            this.ButtonDeleteEntry.TabIndex = 19;
-            this.ButtonDeleteEntry.Text = "Delete entry";
-            this.ButtonDeleteEntry.UseVisualStyleBackColor = false;
-            this.ButtonDeleteEntry.Click += new System.EventHandler(this.ButtonDeleteEntry_Click);
-            // 
             // ButtonViewEntry
             // 
             this.ButtonViewEntry.BackColor = System.Drawing.Color.LemonChiffon;
             this.ButtonViewEntry.ForeColor = System.Drawing.Color.Black;
-            this.ButtonViewEntry.Location = new System.Drawing.Point(247, 138);
+            this.ButtonViewEntry.Location = new System.Drawing.Point(370, 77);
             this.ButtonViewEntry.Name = "ButtonViewEntry";
-            this.ButtonViewEntry.Size = new System.Drawing.Size(231, 36);
+            this.ButtonViewEntry.Size = new System.Drawing.Size(352, 36);
             this.ButtonViewEntry.TabIndex = 17;
             this.ButtonViewEntry.Text = "View Entry";
             this.ButtonViewEntry.UseVisualStyleBackColor = false;
             this.ButtonViewEntry.Click += new System.EventHandler(this.ButtonViewEntry_Click);
             // 
-            // lololool
-            // 
-            this.lololool.Location = new System.Drawing.Point(9, 9);
-            this.lololool.Margin = new System.Windows.Forms.Padding(0);
-            this.lololool.Name = "lololool";
-            this.lololool.Size = new System.Drawing.Size(312, 20);
-            this.lololool.TabIndex = 16;
-            this.lololool.Text = "Enter a new dirt entry";
-            this.lololool.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // okokkoko
             // 
-            this.okokkoko.Location = new System.Drawing.Point(9, 91);
+            this.okokkoko.Location = new System.Drawing.Point(14, 31);
             this.okokkoko.Margin = new System.Windows.Forms.Padding(0);
             this.okokkoko.Name = "okokkoko";
-            this.okokkoko.Size = new System.Drawing.Size(711, 20);
+            this.okokkoko.Size = new System.Drawing.Size(352, 20);
             this.okokkoko.TabIndex = 15;
             this.okokkoko.Text = "Filter dirt entries by parameters";
             this.okokkoko.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // TextBoxNotesLookup
             // 
-            this.TextBoxNotesLookup.Location = new System.Drawing.Point(547, 111);
+            this.TextBoxNotesLookup.Location = new System.Drawing.Point(549, 51);
             this.TextBoxNotesLookup.Name = "TextBoxNotesLookup";
             this.TextBoxNotesLookup.PlaceholderText = "Additional Information";
             this.TextBoxNotesLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
@@ -203,7 +161,7 @@ namespace GetosDirtLocker.gui
             // 
             // TextBoxUserUUIDLookup
             // 
-            this.TextBoxUserUUIDLookup.Location = new System.Drawing.Point(368, 111);
+            this.TextBoxUserUUIDLookup.Location = new System.Drawing.Point(370, 51);
             this.TextBoxUserUUIDLookup.Name = "TextBoxUserUUIDLookup";
             this.TextBoxUserUUIDLookup.PlaceholderText = "User UUID";
             this.TextBoxUserUUIDLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
@@ -212,7 +170,7 @@ namespace GetosDirtLocker.gui
             // 
             // TextBoxIndexLookup
             // 
-            this.TextBoxIndexLookup.Location = new System.Drawing.Point(12, 111);
+            this.TextBoxIndexLookup.Location = new System.Drawing.Point(14, 51);
             this.TextBoxIndexLookup.Name = "TextBoxIndexLookup";
             this.TextBoxIndexLookup.PlaceholderText = "Indexation ID";
             this.TextBoxIndexLookup.PlaceholderTextColor = System.Drawing.Color.Gray;
@@ -222,7 +180,7 @@ namespace GetosDirtLocker.gui
             // mionjnl
             // 
             this.mionjnl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mionjnl.Location = new System.Drawing.Point(11, 134);
+            this.mionjnl.Location = new System.Drawing.Point(13, 73);
             this.mionjnl.Name = "mionjnl";
             this.mionjnl.Size = new System.Drawing.Size(710, 1);
             this.mionjnl.TabIndex = 11;
@@ -255,7 +213,7 @@ namespace GetosDirtLocker.gui
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.GridDirt.DefaultCellStyle = dataGridViewCellStyle2;
-            this.GridDirt.Location = new System.Drawing.Point(11, 180);
+            this.GridDirt.Location = new System.Drawing.Point(14, 119);
             this.GridDirt.MultiSelect = false;
             this.GridDirt.Name = "GridDirt";
             this.GridDirt.ReadOnly = true;
@@ -270,7 +228,7 @@ namespace GetosDirtLocker.gui
             this.GridDirt.RowHeadersVisible = false;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.GridDirt.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.GridDirt.Size = new System.Drawing.Size(711, 387);
+            this.GridDirt.Size = new System.Drawing.Size(708, 448);
             this.GridDirt.TabIndex = 10;
             this.GridDirt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDirt_CellClick);
             this.GridDirt.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDirt_CellMouseEnter);
@@ -319,69 +277,6 @@ namespace GetosDirtLocker.gui
             this.DirtPreview.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.DirtPreview.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // PictureLoading
-            // 
-            this.PictureLoading.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.PictureLoading.Location = new System.Drawing.Point(582, 32);
-            this.PictureLoading.Name = "PictureLoading";
-            this.PictureLoading.Size = new System.Drawing.Size(46, 46);
-            this.PictureLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PictureLoading.TabIndex = 9;
-            this.PictureLoading.TabStop = false;
-            // 
-            // TextBoxAdditionalNotes
-            // 
-            this.TextBoxAdditionalNotes.Enabled = false;
-            this.TextBoxAdditionalNotes.Location = new System.Drawing.Point(281, 32);
-            this.TextBoxAdditionalNotes.Multiline = true;
-            this.TextBoxAdditionalNotes.Name = "TextBoxAdditionalNotes";
-            this.TextBoxAdditionalNotes.PlaceholderText = "Additional Notes";
-            this.TextBoxAdditionalNotes.PlaceholderTextColor = System.Drawing.Color.Gray;
-            this.TextBoxAdditionalNotes.Size = new System.Drawing.Size(295, 46);
-            this.TextBoxAdditionalNotes.TabIndex = 7;
-            // 
-            // TextBoxAttachmentURL
-            // 
-            this.TextBoxAttachmentURL.Enabled = false;
-            this.TextBoxAttachmentURL.Location = new System.Drawing.Point(9, 58);
-            this.TextBoxAttachmentURL.Name = "TextBoxAttachmentURL";
-            this.TextBoxAttachmentURL.PlaceholderText = "Attachment URL";
-            this.TextBoxAttachmentURL.PlaceholderTextColor = System.Drawing.Color.Gray;
-            this.TextBoxAttachmentURL.Size = new System.Drawing.Size(240, 20);
-            this.TextBoxAttachmentURL.TabIndex = 6;
-            // 
-            // TextBoxUserUUID
-            // 
-            this.TextBoxUserUUID.Enabled = false;
-            this.TextBoxUserUUID.Location = new System.Drawing.Point(9, 32);
-            this.TextBoxUserUUID.Name = "TextBoxUserUUID";
-            this.TextBoxUserUUID.PlaceholderText = "User UUID";
-            this.TextBoxUserUUID.PlaceholderTextColor = System.Drawing.Color.Gray;
-            this.TextBoxUserUUID.Size = new System.Drawing.Size(240, 20);
-            this.TextBoxUserUUID.TabIndex = 5;
-            // 
-            // buttonAdd
-            // 
-            this.buttonAdd.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonAdd.Enabled = false;
-            this.buttonAdd.FlatAppearance.BorderSize = 0;
-            this.buttonAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAdd.Location = new System.Drawing.Point(634, 32);
-            this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(86, 46);
-            this.buttonAdd.TabIndex = 0;
-            this.buttonAdd.Text = "+";
-            this.buttonAdd.UseVisualStyleBackColor = false;
-            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
-            // 
-            // ljihgvfyc
-            // 
-            this.ljihgvfyc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ljihgvfyc.Location = new System.Drawing.Point(10, 85);
-            this.ljihgvfyc.Name = "ljihgvfyc";
-            this.ljihgvfyc.Size = new System.Drawing.Size(710, 1);
-            this.ljihgvfyc.TabIndex = 0;
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -419,30 +314,27 @@ namespace GetosDirtLocker.gui
             this.Text = "Geto\'s Locker 2: Electric Boogaloo";
             this.Frame.ResumeLayout(false);
             this.Frame.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxPermanentLoading)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.GridDirt)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureLoading)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GridDirt)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GeneralErrorProvider)).EndInit();
             this.ResumeLayout(false);
         }
 
-        private GetosDirtLocker.controls.BetterTextBox TextBoxUsernameLookup;
+        private System.Windows.Forms.PictureBox PictureLoading;
 
         private System.Windows.Forms.Label LabelEntriesDisplay;
 
-        public System.Windows.Forms.PictureBox PictureBoxPermanentLoading;
+        private GetosDirtLockerBrowser.controls.BetterTextBox TextBoxUsernameLookup;
 
         private System.Windows.Forms.Button ButtonApplyFilters;
 
-        private System.Windows.Forms.Label lololool;
         private System.Windows.Forms.Button ButtonViewEntry;
-        private System.Windows.Forms.Button ButtonDeleteEntry;
 
         private System.Windows.Forms.Label okokkoko;
 
-        private GetosDirtLocker.controls.BetterTextBox TextBoxNotesLookup;
-        private GetosDirtLocker.controls.BetterTextBox TextBoxUserUUIDLookup;
-        private GetosDirtLocker.controls.BetterTextBox TextBoxIndexLookup;
+        private GetosDirtLockerBrowser.controls.BetterTextBox TextBoxNotesLookup;
+        private GetosDirtLockerBrowser.controls.BetterTextBox TextBoxUserUUIDLookup;
+        private GetosDirtLockerBrowser.controls.BetterTextBox TextBoxIndexLookup;
         private System.Windows.Forms.Label mionjnl;
 
         private System.Windows.Forms.DataGridViewTextBoxColumn uuid;
@@ -457,17 +349,6 @@ namespace GetosDirtLocker.gui
         private System.Windows.Forms.DataGridViewTextBoxColumn Information;
 
         private System.Windows.Forms.DataGridView GridDirt;
-
-        public System.Windows.Forms.PictureBox PictureLoading;
-
-        private GetosDirtLocker.controls.BetterTextBox TextBoxAttachmentURL;
-        private GetosDirtLocker.controls.BetterTextBox TextBoxAdditionalNotes;
-
-        private GetosDirtLocker.controls.BetterTextBox TextBoxUserUUID;
-
-        private System.Windows.Forms.Button buttonAdd;
-
-        private System.Windows.Forms.Label ljihgvfyc;
 
         private System.Windows.Forms.MenuStrip miniToolStrip;
 

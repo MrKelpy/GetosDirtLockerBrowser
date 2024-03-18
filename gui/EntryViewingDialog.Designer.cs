@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GetosDirtLocker.gui;
+namespace GetosDirtLockerBrowser.gui;
 
 partial class EntryViewingDialog
 {
