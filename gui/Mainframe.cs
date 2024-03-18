@@ -19,11 +19,6 @@ namespace GetosDirtLockerBrowser.gui
         public static Mainframe Instance { get; private set; }
         
         /// <summary>
-        /// The database manager used to manage the database of the application.
-        /// </summary>
-        public SQLDatabaseManager Database { get; }
-        
-        /// <summary>
         /// The locker addition interface used to add new dirt into the locker.
         /// </summary>
         public static LockerInterface LockerAddition { get; set; }
@@ -32,21 +27,19 @@ namespace GetosDirtLockerBrowser.gui
         /// The mainframe of the application, working in conjunction with the mainframe system in
         /// the LaminariaCore-Winforms library to provide a single-window GUI for the application.
         /// </summary>
-        /// <param name="databaseManager">The SQLDatabase manager used throughout the program</param>
-        public Mainframe(SQLDatabaseManager databaseManager)
+        public Mainframe()
         {
             InitializeComponent();
             CenterToScreen();
             
             // Sets the three interfaces into the properties defined above.
-            LockerAddition = new LockerInterface(databaseManager);
+            LockerAddition = new LockerInterface();
             
             // Set the locker addition interface as the default interface.
             MainLayout.SetAllFrom(LockerAddition.GetLayout());
             this.Text = LockerAddition.Text;
             
             Instance = this;
-            this.Database = databaseManager;
         }
 
         /// <summary>

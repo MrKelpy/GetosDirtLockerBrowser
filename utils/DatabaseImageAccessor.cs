@@ -12,17 +12,6 @@ public class DatabaseImageAccessor
 {
     
     /// <summary>
-    /// The database manager used to access and interact with the db
-    /// </summary>
-    public SQLDatabaseManager Database { get; }
-    
-    /// <summary>
-    /// General constructor of the class, set the database manager.
-    /// </summary>
-    /// <param name="manager">The database manager used throughout the program</param>
-    public DatabaseImageAccessor(SQLDatabaseManager manager) => this.Database = manager;
-    
-    /// <summary>
     /// Checks if an image exists in the database based on a specified table name and ID.
     /// </summary>
     /// <param name="id">The image ID to check for</param>
@@ -32,7 +21,8 @@ public class DatabaseImageAccessor
     {
         try
         {
-            return this.Database.Select(table, $"content_id = '{id}'").Count > 0;
+            SQLDatabaseManager database = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+            return database.Select(table, $"content_id = '{id}'").Count > 0;
         }
         
         // If an exception occurs, return false.
@@ -50,7 +40,8 @@ public class DatabaseImageAccessor
         try
         {
             // Create the command and add the parameters.
-            using SqlCommand command = new($"SELECT * FROM {table} WHERE content_id = @id", this.Database.Connector.Connection);
+            SQLDatabaseManager database = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+            using SqlCommand command = new($"SELECT * FROM {table} WHERE content_id = @id", database.Connector.Connection);
             command.Parameters.AddWithValue("@id", id);
             
             // Execute the command and return the result.

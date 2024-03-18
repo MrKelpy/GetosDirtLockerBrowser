@@ -15,11 +15,6 @@ namespace GetosDirtLockerBrowser.gui
     /// </summary>
     public partial class LockerInterface : Form
     {
-        
-        /// <summary>
-        /// The database manager used to access and interact with the db
-        /// </summary>
-        private SQLDatabaseManager Database { get; }
 
         /// <summary>
         /// The dirt manager used to download and cache pictures relative to dirt
@@ -39,13 +34,11 @@ namespace GetosDirtLockerBrowser.gui
         /// <summary>
         /// Main constructor of the class
         /// </summary>
-        /// <param name="manager">The database manager used to access and interact with the db</param>
-        public LockerInterface(SQLDatabaseManager manager)
+        public LockerInterface()
         {
             InitializeComponent();
-            this.Database = manager;
-            this.DirtManager = new DirtStorageManager(Database);
-            this.ImageAccessor = new DatabaseImageAccessor(Database);
+            this.DirtManager = new DirtStorageManager();
+            this.ImageAccessor = new DatabaseImageAccessor();
             
             GridDirt.RowTemplate.Height = 100;
             GridDirt.ClearSelection();
@@ -62,6 +55,8 @@ namespace GetosDirtLockerBrowser.gui
         /// <returns>The list of rows to add to the database</returns>
         private List<string[]> GetFilteredEntries()
         {
+            SQLDatabaseManager database = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+            
             string indexationFilter = !TextBoxIndexLookup.Text.Equals(string.Empty) ? $"indexation_id LIKE '%{TextBoxIndexLookup.Text}%'" : "";
             string usernameFilter = !TextBoxUsernameLookup.Text.Equals(string.Empty) ? $"username LIKE '%{TextBoxUsernameLookup.Text}%'" : "";
             string userUUIDFilter = !TextBoxUserUUIDLookup.Text.Equals(string.Empty) ? $"user_id LIKE '%{TextBoxUserUUIDLookup.Text}%'" : "";
@@ -70,7 +65,7 @@ namespace GetosDirtLockerBrowser.gui
             
             // If all the filters are empty, return all the entries
             if (indexationFilter == "" && userUUIDFilter == "" && notesFilter == "" && usernameFilter == "")
-                return this.Database.Select("Dirt");
+                return database.Select("Dirt");
             
             // Puts the filters together in a string ignoring any empty ones
             if (indexationFilter != "") finalFilter += indexationFilter;
@@ -79,7 +74,7 @@ namespace GetosDirtLockerBrowser.gui
             if (notesFilter != "") finalFilter += finalFilter == "" ? notesFilter : $" AND {notesFilter}";
             
             // Returns the filtered entries
-            return this.Database.Select("Dirt", finalFilter);
+            return database.Select("Dirt", finalFilter);
         }
         
         /// <summary>
@@ -148,8 +143,7 @@ namespace GetosDirtLockerBrowser.gui
             return await Task.Run(async () =>
             {
                 // Gets a newly connected manager for this async thread
-                SQLDatabaseManager manager = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
-                manager.UseDatabase("DirtLocker");
+                SQLDatabaseManager database = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
                 
                 DiscordUser user = new DiscordUser(entry[1]);
                 string informationString = user.GetInformationString(entry);
@@ -165,8 +159,8 @@ namespace GetosDirtLockerBrowser.gui
                 rowTemplate?.CreateCells(GridDirt, entry[0], entry[1], userAvatar, informationString, dirtImage);
                 
                 // Disposes of the database connection
-                manager.Connector.Disconnect();
-                manager.Connector.Dispose();
+                database.Connector.Disconnect();
+                database.Connector.Dispose();
                 
                 return rowTemplate;
             });
@@ -215,9 +209,10 @@ namespace GetosDirtLockerBrowser.gui
             string userId = GridDirt.Rows[e.RowIndex].Cells[1].Value.ToString();
             string indexationId = GridDirt.Rows[e.RowIndex].Cells[0].Value.ToString();
             DiscordUser user = new DiscordUser(userId);
+            SQLDatabaseManager database = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
             
             // Gets the information formatted in the discord-pasteable format
-            string information = user.GetInformationString(this.Database, indexationId, true);
+            string information = user.GetInformationString(database, indexationId, true);
             Clipboard.SetData(DataFormats.Text, information);
 
             cell.Value = "Copied to Clipboard";
@@ -279,7 +274,8 @@ namespace GetosDirtLockerBrowser.gui
             
             // Gets the user and the entry data
             string indexationId = this.SelectedRow.Cells[0].Value.ToString();
-            string[] entry = this.Database.Select("Dirt", $"indexation_id = '{indexationId}'")[0];
+            SQLDatabaseManager database = Program.CreateManagerFromCredentials(Program.DefaultHost, Program.DefaultCredentials);
+            string[] entry = database.Select("Dirt", $"indexation_id = '{indexationId}'")[0];
             DiscordUser user = new DiscordUser(entry[1]);
             
             // Opens the viewing dialog

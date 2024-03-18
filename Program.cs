@@ -59,16 +59,13 @@ namespace GetosDirtLockerBrowser
                     DefaultCredentials[1] = databaseHostFile[3];
                 }
 
-                // Create a database manager from the credentials provided.
-                SQLDatabaseManager manager = CreateManagerFromCredentials(DefaultHost, DefaultCredentials);
-
                 // Use the database and start the network thread, checking for network connection.
                 new Thread(EnsureNetworkThread).Start();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                Application.Run(new Mainframe(manager));
+                Application.Run(new Mainframe());
             }
 
             // If an SQL exception occurs, show an error message letting the user know that the database couldn't be accessed.
