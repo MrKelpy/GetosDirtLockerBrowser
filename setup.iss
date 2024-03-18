@@ -5,7 +5,7 @@
 #define MyAppVersion "1.0"
 #define MyAppPublisher "Alexandre Silva (MrKelpy)"
 #define MyAppURL "https://github.com/MrKelpy/GetosDirtLockerBrowser"
-#define MyAppExeName "GetosDirtLockerBrowser"
+#define MyAppExeName "GetosDirtLockerBrowser.exe"
 #define MyAppAssocName "Executable"
 #define MyAppAssocExt ".exe"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
@@ -28,7 +28,7 @@ LicenseFile=C:\dev\C#\GetosLockerIndexer\GetosDirtLockerBrowser\LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=GetosDirtLockerBrowser.exe
+OutputBaseFilename=GetosDirtLockerBrowser
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
