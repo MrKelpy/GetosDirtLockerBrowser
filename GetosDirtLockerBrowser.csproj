@@ -115,9 +115,6 @@
       <PackageReference Include="System.Text.Json" Version="8.0.2" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include=".\sql\dirtlocker.sql" Visible="True">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <Content Include="Resources\copied.png" />
         <Content Include="Resources\icon.ico" />
         <Content Include="Resources\loader.gif" />

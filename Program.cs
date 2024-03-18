@@ -61,12 +61,7 @@ namespace GetosDirtLockerBrowser
                 // Create a database manager from the credentials provided.
                 SQLDatabaseManager manager = CreateManagerFromCredentials(DefaultHost, DefaultCredentials);
 
-                // If the database doesn't exist, create it.
-                if (!manager.DatabaseExists("DirtLocker"))
-                    manager.RunSqlScript("./sql/dirtlocker.sql");
-
                 // Use the database and start the network thread, checking for network connection.
-                manager.UseDatabase("DirtLocker");
                 new Thread(EnsureNetworkThread).Start();
 
                 Application.EnableVisualStyles();
@@ -96,14 +91,14 @@ namespace GetosDirtLockerBrowser
             // If the credentials are present, use an sql authentication
             if (credentials.Length > 0)
             {
-                SQLServerConnector connector = new SQLServerConnector(host, "master", credentials[0], credentials[1]);
+                SQLServerConnector connector = new SQLServerConnector(host, "DirtLocker", credentials[0], credentials[1]);
                 return new SQLDatabaseManager(connector);
             }
 
             // If the credentials are not present, use a windows authentication
             else
             {
-                SQLServerConnector connector = new SQLServerConnector(host, "master");
+                SQLServerConnector connector = new SQLServerConnector(host, "DirtLocker");
                 return new SQLDatabaseManager(connector);
             }
 
