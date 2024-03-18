@@ -5,7 +5,7 @@
 #define MyAppVersion "1.0"
 #define MyAppPublisher "Alexandre Silva (MrKelpy)"
 #define MyAppURL "https://github.com/MrKelpy/GetosDirtLockerBrowser"
-#define MyAppExeName "GetosDirtLockerBrowser.exe"
+#define MyAppExeName "GetosDirtLockerBrowser"
 #define MyAppAssocName "Executable"
 #define MyAppAssocExt ".exe"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
