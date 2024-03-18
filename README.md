@@ -12,7 +12,7 @@ Please note that this program has only been tested on **Windows** and might not 
 1. Download the [installer present on the releases page](https://github.com/MrKelpy/GetosDirtLockerBrowser/releases/latest) or clone this repository using.:
 
 ```
-$ git clone https://github.com/MrKelpy/GetosDirtLocker
+$ git clone https://github.com/MrKelpy/GetosDirtLockerBrowser
 ```
 
 2. Run the program once in order to create the database configuration file and setup the `%appdata%/.GetosLocker/data/database.cfg` file if needed according to the information below. If your database is local, you can skip this.
