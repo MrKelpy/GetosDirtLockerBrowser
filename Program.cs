@@ -66,7 +66,7 @@ namespace GetosDirtLockerBrowser
                 }
 
                 // Use the database and start the network thread, checking for network connection.
-                new Thread(EnsureNetworkThread).Start();
+                new Thread(EnsureNetworkThread) {IsBackground = true}.Start();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
